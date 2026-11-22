@@ -1,5 +1,10 @@
 # Changes
 
+## Unreleased
+
+### Added
+- Playwright (dev dependency) and `npm run screenshots` (`scripts/screenshot.mjs`), which capture the running site at desktop and mobile sizes, in light mode and with reduced motion, plus a case study and the 404 page. They also report console errors such as CSP violations.
+
 ## 0.1.0 — 2026-11-22
 
 First version of pedromdominguez.dev.

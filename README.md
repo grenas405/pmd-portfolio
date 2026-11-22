@@ -68,6 +68,7 @@ npm run check      # build + type-check (server and client) + tests
 | `npm run typecheck` | Build, `wrangler types`, then `tsc` for the Worker and the client JS |
 | `npm test` | Build, then run Vitest in the Workers runtime (`@cloudflare/vitest-plugin`) |
 | `npm run deploy` | `check`, then `wrangler deploy` |
+| `npm run screenshots` | With `npm run dev` running, capture desktop, mobile, light, reduced-motion, case-study and 404 views into `.screenshots/` (Playwright). Set `CHROMIUM_PATH` to reuse an installed Chrome instead of running `npx playwright install chromium`. |
 
 ## Edit the content
 
