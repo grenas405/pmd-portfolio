@@ -1,0 +1,80 @@
+/* Design tokens. Dark ("prairie dusk") is the default; light ("prairie noon") is opt-in. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("../../node_modules/@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2") format("woff2-variations");
+}
+
+/* Metric-adjusted fallback keeps layout stable while Archivo loads. */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  size-adjust: 103%;
+  ascent-override: 87%;
+  descent-override: 21%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* Base palette */
+  --dusk: #10202e;
+  --dusk-raised: #172b3b;
+  --supercell: #1f4e5f;
+  --wheat: #e9b949;
+  --wheat-deep: #7f5500;
+  --sky: #8ec3d3;
+  --prairie: #eef2ec;
+  --noon: #e8f0f3;
+  --noon-raised: #f6f9fa;
+  --slate: #3c5464;
+  --mist: #a9bdc6;
+
+  color-scheme: dark;
+
+  /* Semantic tokens resolve per color scheme. */
+  --bg: light-dark(var(--noon), var(--dusk));
+  --surface: light-dark(var(--noon-raised), var(--dusk-raised));
+  --text: light-dark(var(--dusk), var(--prairie));
+  --muted: light-dark(var(--slate), var(--mist));
+  --accent: light-dark(var(--wheat-deep), var(--wheat));
+  --link: light-dark(#1b5c71, var(--sky));
+  --rule: light-dark(rgb(16 32 46 / 0.16), rgb(238 242 236 / 0.14));
+  --button-bg: var(--wheat);
+  --button-text: var(--dusk);
+  --focus: light-dark(#0b6a86, var(--wheat));
+  --sky-top: light-dark(#a9cfdf, #0a1621);
+  --sky-mid: light-dark(#d7e7ec, #1b2b45);
+  --sky-horizon: light-dark(#f6dfa6, #8a4a3c);
+  --horizon-haze: light-dark(#f6dfa6, #6b3f3a);
+  --glow: light-dark(rgb(240 170 70 / 0.55), rgb(236 132 62 / 0.55));
+  --blade-base: light-dark(#2d6b5c, #1f4e5f);
+  --blade-tip: light-dark(#c9922a, var(--wheat));
+
+  /* Type */
+  --font: "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --step-3: clamp(2rem, 1.3rem + 3vw, 3.5rem);
+  --step-4: clamp(2.5rem, 1rem + 6.4vw, 7rem);
+  --wide: 125%;
+  --semi-wide: 112%;
+
+  /* Space and layout */
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --measure: 62ch;
+  --page: 76rem;
+  --section-space: clamp(5rem, 12vw, 10rem);
+  --radius-small: 0.375rem;
+  --radius-pill: 999rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}

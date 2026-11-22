@@ -1,0 +1,35 @@
+/* Motion that the browser can run on its own. Everything here respects reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Cross-document transitions between the home page and project pages. */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 280ms;
+  }
+
+  /* The process line fills in as the steps scroll past. */
+  @supports (animation-timeline: view()) {
+    .step:not(:last-child)::after {
+      background: linear-gradient(to bottom, var(--accent) 50%, var(--rule) 50%) 0 100% / 100% 200% no-repeat;
+      animation: step-fill linear both;
+      animation-timeline: view();
+      animation-range: cover 20% cover 60%;
+    }
+
+    @keyframes step-fill {
+      to {
+        background-position: 0 0;
+      }
+    }
+  }
+}
+
+/* A project title morphs into the page heading when navigating to it. */
+@supports (x: attr(x type(*))) {
+  [data-vt] {
+    view-transition-name: attr(data-vt type(<custom-ident>));
+  }
+}

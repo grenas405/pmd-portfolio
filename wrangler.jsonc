@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "pmd-portfolio",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    // Every request goes through the Worker so one module (src/headers.ts) owns all response headers.
+    "run_worker_first": true
+  },
+  "routes": [
+    { "pattern": "pedromdominguez.dev", "custom_domain": true },
+    { "pattern": "www.pedromdominguez.dev", "custom_domain": true }
+  ]
+}
