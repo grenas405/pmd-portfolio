@@ -4,48 +4,49 @@ Portfolio and lead site for **Pedro M. Dominguez**, who builds web apps, APIs an
 
 ## Design
 
-- **Signature moment:** the hero is a prairie at dusk. A 3D field of grass blades (DOM elements under CSS perspective) rises from the horizon, then sways in waves of wind that roll west to east, with periodic gusts. The first gust also passes through the headline. All of this motion is driven by anime.js (`animate`, `stagger` with grid and jitter, `createScope`, `createAnimatable`). Nothing else on the page moves on its own.
-- **Palette:** storm-dusk blue `#10202e`, supercell teal `#1f4e5f`, wheat gold `#e9b949`, sky glow `#8ec3d3` and prairie light `#eef2ec`. Dark is the default theme, light is opt-in.
-- **Type:** Archivo variable only. Headlines use the expanded width (`font-stretch: 125%`) and body text uses normal width.
-- **Accessibility:**
-  - There is a visible Pause button (WCAG 2.2.2).
-  - `prefers-reduced-motion` shows a still field.
-  - Motion pauses when the hero scrolls out of view.
-  - Headline text is never hidden, so it is readable and is the LCP element from the first frame.
+**Concept: `prairie.sh`.** A futuristic, Linux-themed site with a touch of country. The hero is a modern terminal window open over an Oklahoma prairie at dusk, and the prairie is drawn entirely in glyphs.
 
-## Architecture
+- **The terminal:**
+  - A tmux-style status bar with the live Oklahoma City time.
+  - Typed commands (`cat howdy.txt`, `ls services/`) whose output reveals the pitch.
+  - A real `<h1>` and real links.
+  - An interactive prompt. Type `help`, `ls services`, `cd contact`, `call`, `theme` and so on.
+- **The prairie** is drawn on one `<canvas>`:
+  - A wheat field of `| / \ ;` glyphs swaying in wind waves and gusts.
+  - A banded setting sun.
+  - An ASCII Aermotor windmill turning on the horizon.
+  - A perspective grid fading into the horizon.
+  - Glyphs that "decrypt" into wheat when the page loads.
+  - The same scene returns behind the contact band and the 404 page.
+- **Motion:**
+  - anime.js drives the boot timeline, the wind parameters, the scroll-drawn process line and metro map, the title reveals, the 3D mockup tilt and parallax, and the magnetic CTAs.
+  - There is a visible Pause button (WCAG 2.2.2), and the prairie only animates while on screen.
+  - `prefers-reduced-motion` shows a complete still scene.
+- **Look:**
+  - Palette: storm-dusk blue `#10202e`, supercell teal `#1f4e5f`, wheat gold `#e9b949`, sky `#8ec3d3`, red dirt `#c4553a`, prairie light `#eef2ec`.
+  - Themes: dark by default; light ("prairie noon") is opt-in.
+  - Type: Archivo variable for the voice (the expanded width for headlines), and JetBrains Mono only for terminal UI.
+- **Content:** a services bento, project showcases with coded phone and browser mockups, guarantees (with testimonial slots), a scroll-drawn process, an OKC metro map, about with a portrait slot, a FAQ, and the contact band.
 
-Small, single-purpose modules with no classes and no shared mutable state. Side effects live only at the two entry points: `src/index.ts` (server) and `client/main.js` (browser).
+**Performance by construction.** Version 0.1 animated about 1,600 DOM nodes and produced about 2,400 compositor layers, which ran at about 6 fps in headless Chrome. The canvas prairie draws a pre-rendered glyph atlas at 30 fps from a small parameter object:
 
-```
-src/                      Cloudflare Worker (TypeScript)
-  index.ts                entry: route → render → respond; the only I/O; one try/catch boundary
-  router.ts               pure: (method, URL) → Route union
-  result.ts               Result<T, E> for explicit errors in pure code
-  html.ts                 auto-escaping `html` tagged template
-  headers.ts              security + cache header policies (CSP, HSTS, COOP, CORP, …)
-  respond.ts              pure Response builders
-  content.ts              ALL site copy and data: edit this file to change the site
-  seo.ts / vcard.ts       JSON-LD, sitemap, vCard builders
-  theme.ts                theme cookie parsing
-  views/                  pure render functions: (context) → Html
-client/                   browser code (ES modules, JSDoc-typed and type-checked)
-  main.js                 composition root; each feature isolated with `safely()`
-  motion/                 field + headline animation, seeded randomness, preferences
-  ui/                     theme toggle, pause control, copy buttons, menu, toast
-  styles/                 tokens, base, layout, field, motion CSS
-scripts/build-client.mjs  esbuild → content-hashed files in public/assets + src/assets.gen.ts
-public/                   static files served through the ASSETS binding
-test/                     Vitest, running inside the Workers runtime
-```
+| | 0.1 (DOM field) | 0.2 (canvas) |
+|---|---|---|
+| Compositor layers | 2,390 | 19 |
+| Style recalc per frame | ~12 ms | 0.17 ms |
+| Desktop / mobile fps (headless, CPU) | 6 / – | 51 / 60 |
+| CLS | – | 0.000 |
 
-Every request goes through the Worker (`run_worker_first: true`), so `src/headers.ts` is the single source of truth for response headers.
+Other measures:
+- Cells hidden behind the terminal are skipped.
+- No `backdrop-filter` sits over the animating canvas (it doubled frame cost).
+- Run `npm run perf` to re-measure.
 
 ## Security (OWASP)
 
 - **Enforced CSP:** `default-src 'none'; script-src 'self'; style-src 'self'`, plus `require-trusted-types-for 'script'; trusted-types 'none'`.
   - There are no inline scripts, styles or event handlers, and no third-party origins. Fonts and anime.js are self-hosted.
-  - Client code builds DOM only with `createElement` and `textContent`. anime.js's `splitText` writes `innerHTML`, so it isn't used; the Worker renders the headline pre-split instead.
+  - Client code builds DOM only with `createElement` and `textContent`. Terminal output is set with `textContent` too. anime.js's `splitText` writes `innerHTML`, so it isn't used; the Worker sends section titles pre-split into words instead. anime's `onScroll` only writes `innerHTML` in debug mode, which is never enabled.
 - **Other headers:** HSTS (preload-ready), `X-Content-Type-Options`, `Referrer-Policy`, a deny-all `Permissions-Policy`, COOP and CORP `same-origin`, and `X-Frame-Options: DENY`.
 - **Escaping:** every interpolated value is HTML-escaped by default, and JSON-LD is serialized so it can't break out of its `<script>` tag. Tests feed hostile content through every view.
 - **Request handling:**
@@ -68,11 +69,17 @@ npm run check      # build + type-check (server and client) + tests
 | `npm run typecheck` | Build, `wrangler types`, then `tsc` for the Worker and the client JS |
 | `npm test` | Build, then run Vitest in the Workers runtime (`@cloudflare/vitest-plugin`) |
 | `npm run deploy` | `check`, then `wrangler deploy` |
+| `npm run perf` | With `npm run dev` running, measure the animating hero: fps, p95 frame time, long frames, layers, script/style time per frame, LCP and CLS. |
 | `npm run screenshots` | With `npm run dev` running, capture desktop, mobile, light, reduced-motion, case-study and 404 views into `.screenshots/` (Playwright). Set `CHROMIUM_PATH` to reuse an installed Chrome instead of running `npx playwright install chromium`. |
 
 ## Edit the content
 
-All copy lives in [`src/content.ts`](src/content.ts): profile, services, projects, process, service area, about and FAQs.
+All copy lives in [`src/content.ts`](src/content.ts): profile, terminal greeting, availability line, guarantees, testimonials, services, projects, process, service area, about and FAQs.
+
+- **Portrait:** put a photo in `public/img/` and set `profile.portrait` (`src`, `alt`, `width`, `height`). Until then a "PD" monogram is shown.
+- **Testimonials:** add real quotes to `testimonials`. The section heading switches to "What owners say" and the quotes appear above the guarantees. While the list is empty, nothing is shown, so no quotes are ever faked.
+- **Availability:** update `availability` (e.g. "Booking new projects for January 2027") as your schedule changes.
+- **Projects:** each project picks a coded mockup (`mockup: "ordering" | "field-service" | "booking"`) and one `keyOutcome` for its card.
 
 **Before launch, replace the placeholders:**
 - [ ] Phone number (`+14055550123` / `(405) 555-0123` is a fictional 555 number)

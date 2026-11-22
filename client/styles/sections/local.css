@@ -1,0 +1,76 @@
+.local {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .local {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* Radar rings centred on Oklahoma City. */
+.local__map {
+  padding: clamp(1rem, 3vw, 2rem);
+  background:
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 46px, var(--rule) 46px 47px),
+    var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+}
+
+.metro-map {
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+
+.metro-map__road {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+
+.metro-map__city circle {
+  fill: var(--bg);
+  stroke: var(--link);
+  stroke-width: 2;
+}
+
+.metro-map__city.is-hub circle {
+  fill: var(--accent);
+  stroke: var(--accent);
+  filter: drop-shadow(0 0 8px color-mix(in oklab, var(--accent) 70%, transparent));
+}
+
+.metro-map__city text {
+  fill: var(--muted);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.metro-map__city.is-hub text {
+  fill: var(--text);
+  font-weight: 700;
+}
+
+.cities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1.5rem;
+  font-size: var(--step-1);
+  font-stretch: var(--semi-wide);
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.cities li:first-child {
+  color: var(--accent);
+}

@@ -1,0 +1,98 @@
+.about {
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (min-width: 56rem) {
+  .about {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: 5rem;
+  }
+
+  .portrait {
+    position: sticky;
+    inset-block-start: calc(var(--header-height) + 2rem);
+  }
+}
+
+.about .section-head {
+  grid-template-columns: 1fr;
+  margin-block-end: 1.75rem;
+}
+
+.portrait__img,
+.portrait__placeholder {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+}
+
+/* Placeholder until a real photo is added in content.ts: a monogram at dusk. */
+.portrait__placeholder {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(to bottom, transparent 55%, var(--surface-band) 100%),
+    radial-gradient(70% 45% at 70% 62%, rgb(236 132 62 / 0.4), transparent 70%),
+    linear-gradient(to bottom, var(--sky-top), var(--sky-mid) 50%, var(--sky-horizon) 62%, var(--ground) 63%);
+}
+
+.portrait__placeholder span {
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 820;
+  font-stretch: var(--wide);
+  letter-spacing: -0.04em;
+  color: var(--prairie);
+  text-shadow: 0 0 2rem rgb(233 185 73 / 0.35);
+}
+
+.portrait figcaption {
+  margin-block-start: 0.75rem;
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  color: var(--muted);
+}
+
+.prose {
+  display: grid;
+  gap: 1.1rem;
+  max-inline-size: var(--measure);
+  font-size: var(--step-1);
+  line-height: 1.55;
+}
+
+.checks {
+  display: grid;
+  gap: 0.75rem 2rem;
+  margin-block-start: 2rem;
+  padding-block-start: 2rem;
+  border-block-start: 1px solid var(--rule);
+}
+
+@media (min-width: 36rem) {
+  .checks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.checks li {
+  position: relative;
+  padding-inline-start: 1.75rem;
+  font-weight: 600;
+}
+
+.checks li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.2rem;
+  inset-block-start: 0.3em;
+  inline-size: 0.45rem;
+  block-size: 0.8rem;
+  border: solid var(--accent);
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+}

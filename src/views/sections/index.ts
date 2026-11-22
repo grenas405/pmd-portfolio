@@ -1,0 +1,10 @@
+export { about } from "./about";
+export { contact } from "./contact";
+export { faqs } from "./faq";
+export { hero } from "./hero";
+export { local } from "./local";
+export { process } from "./process";
+export { proof } from "./proof";
+export { services } from "./services";
+export { exampleTag, sectionHeader, words } from "./shared";
+export { work } from "./work";

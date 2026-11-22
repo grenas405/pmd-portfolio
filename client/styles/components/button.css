@@ -1,0 +1,75 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-block-size: 3rem;
+  padding: 0.7rem 1.35rem;
+  font: inherit;
+  font-weight: 680;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 160ms, border-color 160ms, box-shadow 160ms, translate 120ms;
+}
+
+.button:active {
+  translate: 0 1px;
+}
+
+.button--primary {
+  color: var(--button-text);
+  background: var(--button-bg);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), 0 10px 28px -10px rgb(233 185 73 / 0.55);
+}
+
+.button--primary:hover {
+  background: color-mix(in oklab, var(--button-bg) 86%, white);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 0 14px 34px -10px rgb(233 185 73 / 0.7);
+}
+
+.button--ghost {
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 40%, transparent);
+  border-color: var(--rule);
+}
+
+.button--ghost:hover {
+  border-color: color-mix(in oklab, var(--text) 35%, transparent);
+  background: color-mix(in oklab, var(--surface) 80%, transparent);
+}
+
+.button--small {
+  min-block-size: 2.4rem;
+  padding: 0.4rem 1rem;
+}
+
+.link-button {
+  padding: 0;
+  font: inherit;
+  color: var(--link);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.06em;
+  cursor: pointer;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  border: 1px solid color-mix(in oklab, var(--accent) 55%, transparent);
+  border-radius: 0.3rem;
+}
+
+.icon {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  flex: none;
+}

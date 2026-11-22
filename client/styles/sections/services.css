@@ -1,0 +1,91 @@
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tile {
+  grid-column: span 12;
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 0 var(--highlight);
+  overflow: hidden;
+  transition: border-color 200ms, translate 200ms var(--ease-out);
+}
+
+.tile:hover {
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--rule));
+  translate: 0 -2px;
+}
+
+@media (min-width: 56rem) {
+  .tile {
+    grid-column: span 4;
+  }
+
+  .tile--feature {
+    grid-column: span 12;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+  }
+}
+
+.tile__icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+}
+
+.tile__name {
+  margin-block-start: 1.25rem;
+  font-size: var(--step-2);
+  font-stretch: var(--semi-wide);
+}
+
+.tile__summary {
+  margin-block-start: 0.6rem;
+  color: var(--muted);
+}
+
+.tile__label {
+  margin-block-start: 1.25rem;
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  color: var(--accent);
+}
+
+.tile__uses {
+  display: grid;
+  gap: 0.35rem;
+  margin-block-start: 0.5rem;
+  font-size: var(--step--1);
+}
+
+.tile__uses li {
+  position: relative;
+  padding-inline-start: 1rem;
+}
+
+.tile__uses li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.6em;
+  inline-size: 0.35rem;
+  block-size: 0.35rem;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.tile__art {
+  perspective: 1200px;
+}

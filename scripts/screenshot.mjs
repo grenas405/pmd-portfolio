@@ -31,6 +31,16 @@ const capture = async (browser, shot) => {
   page.on("pageerror", (e) => problems.push(`pageerror: ${e.message}`));
   await page.goto(BASE + shot.path, { waitUntil: "networkidle" });
   await page.waitForTimeout(3000); // let the intro animation settle
+  if (shot.fullPage) {
+    // Scroll through once so scroll-triggered reveals run, then return to the top.
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    for (let y = 0; y < height; y += shot.viewport.height / 2) {
+      await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), y);
+      await page.waitForTimeout(250);
+    }
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(800);
+  }
   const file = join(OUT, `${shot.name}.png`);
   await page.screenshot({ path: file, fullPage: shot.fullPage ?? false });
   await context.close();

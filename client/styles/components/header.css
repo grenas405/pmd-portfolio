@@ -1,0 +1,189 @@
+.site-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  block-size: var(--header-height);
+  padding-inline: var(--pad-inline);
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border-block-end: 1px solid var(--rule);
+}
+
+/* Over the hero the header is clear; it turns to glass as the page scrolls. */
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-glass linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 160px;
+  }
+
+  @keyframes header-glass {
+    from {
+      background: transparent;
+      border-color: transparent;
+      backdrop-filter: none;
+    }
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text);
+  font-weight: 760;
+  font-stretch: var(--wide);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand__mark {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+}
+
+.brand__blade--1 {
+  stroke: var(--sky);
+}
+
+.brand__blade--2 {
+  stroke: var(--wheat);
+}
+
+.brand__blade--3 {
+  stroke: var(--red-dirt);
+}
+
+.site-nav {
+  margin-inline-start: auto;
+}
+
+.menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+}
+
+.menu-button__icon {
+  inline-size: 1rem;
+  block-size: 0.6rem;
+  border-block: 2px solid currentColor;
+}
+
+.site-menu {
+  margin: 0;
+  inset: calc(var(--header-height) + 0.5rem) var(--gutter) auto auto;
+  min-inline-size: 13rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.site-menu a {
+  position: relative;
+  display: block;
+  padding: 0.65rem 0.9rem;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: var(--radius);
+}
+
+.site-menu a:hover {
+  background: var(--rule);
+}
+
+.site-menu a[aria-current] {
+  color: var(--accent);
+}
+
+@media (min-width: 56rem) {
+  .menu-button {
+    display: none;
+  }
+
+  /* Wide screens show the menu inline; the popover is only used on small screens. */
+  .site-menu {
+    display: flex;
+    position: static;
+    inset: auto;
+    gap: 0.25rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .site-menu a {
+    padding: 0.45rem 0.8rem;
+  }
+
+  .site-menu a:hover {
+    background: none;
+    color: var(--accent);
+  }
+
+  /* Active-section underline. */
+  .site-menu a::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0.8rem;
+    inset-block-end: 0.1rem;
+    block-size: 2px;
+    background: var(--accent);
+    scale: 0 1;
+    transition: scale 260ms var(--ease-out);
+  }
+
+  .site-menu a[aria-current]::after {
+    scale: 1 1;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* A half-lit disc: sun in light mode, moon in dark mode. */
+.theme-toggle__icon {
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--text) 50%, transparent 50%);
+  border: 2px solid var(--text);
+}
+
+@media (max-width: 30rem) {
+  .header-call,
+  .brand__name {
+    display: none;
+  }
+}

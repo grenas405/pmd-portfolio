@@ -6,6 +6,14 @@
  * the example projects for real client work as it ships.
  */
 
+export type Portrait = {
+  /** Path under public/, e.g. "/img/pedro.avif". */
+  readonly src: string;
+  readonly alt: string;
+  readonly width: number;
+  readonly height: number;
+};
+
 export type Profile = {
   readonly name: string;
   readonly givenName: string;
@@ -20,16 +28,27 @@ export type Profile = {
   readonly url: string;
   readonly responseTime: string;
   readonly links: ReadonlyArray<{ readonly label: string; readonly href: string }>;
+  /** Leave undefined to show the monogram placeholder. */
+  readonly portrait?: Portrait;
 };
+
+/** Names of the line icons in src/views/icons.ts. */
+export type IconName = "browser" | "nodes" | "phone" | "wrench" | "price" | "key" | "clock" | "pin";
 
 export type Service = {
   readonly id: string;
+  /** Directory name shown by `ls services/` in the hero terminal. */
+  readonly dir: string;
+  readonly icon: IconName;
   readonly name: string;
   readonly summary: string;
   readonly goodFor: readonly string[];
 };
 
 export type ProjectKind = "example" | "client";
+
+/** Which coded UI mockup illustrates a project (src/views/mockups.ts). */
+export type MockupKind = "ordering" | "field-service" | "booking";
 
 export type CaseStudy = {
   readonly slug: string;
@@ -39,6 +58,9 @@ export type CaseStudy = {
   readonly industry: string;
   readonly title: string;
   readonly summary: string;
+  /** The single result shown on the project card. */
+  readonly keyOutcome: string;
+  readonly mockup: MockupKind;
   readonly problem: string;
   readonly built: readonly string[];
   readonly outcomes: readonly string[];
@@ -50,16 +72,34 @@ export type Step = { readonly name: string; readonly detail: string };
 
 export type Faq = { readonly question: string; readonly answer: string };
 
+export type Guarantee = { readonly icon: IconName; readonly title: string; readonly detail: string };
+
+/** Only real, attributable quotes. The section stays hidden while this list is empty. */
+export type Testimonial = { readonly quote: string; readonly name: string; readonly business: string };
+
+export type Terminal = {
+  readonly user: string;
+  readonly host: string;
+  readonly greetingFile: string;
+  readonly greeting: string;
+};
+
 export type SiteContent = {
   readonly profile: Profile;
   readonly headline: readonly string[];
   readonly intro: string;
+  readonly terminal: Terminal;
+  /** One line shown under the hero, e.g. when you can take new work. */
+  readonly availability: string;
+  readonly guarantees: readonly Guarantee[];
+  readonly testimonials: readonly Testimonial[];
   readonly services: readonly Service[];
   readonly caseStudies: readonly CaseStudy[];
   readonly process: readonly Step[];
   readonly serviceArea: readonly string[];
   readonly localPitch: string;
   readonly about: readonly string[];
+  readonly howIWork: readonly string[];
   readonly faqs: readonly Faq[];
 };
 
@@ -84,12 +124,31 @@ export const content: SiteContent = {
   // Each entry is one line of the hero headline.
   headline: ["Custom software", "for Oklahoma City", "businesses."],
 
+  terminal: {
+    user: "pedro",
+    host: "okc",
+    greetingFile: "howdy.txt",
+    greeting: "Howdy, y'all. Pull up a chair.",
+  },
+
+  availability: "Booking new projects for January 2027",
+
+  guarantees: [
+    { icon: "price", title: "A fixed price, up front", detail: "You get one number before work starts. No hourly meter, no surprise invoices." },
+    { icon: "key", title: "You own everything", detail: "The code, the accounts, and the domain are yours. Leave any time and take it all with you." },
+    { icon: "clock", title: "A reply within a business day", detail: "Call, text, or email and you'll hear back from me, not a ticket system." },
+  ],
+
+  testimonials: [],
+
   intro:
     "I'm Pedro. I build websites, web apps, and Android apps for owners across the metro — online ordering, booking, customer portals, and the tools that replace the spreadsheet you're tired of fighting.",
 
   services: [
     {
       id: "web-apps",
+      dir: "web-apps",
+      icon: "browser",
       name: "Websites & web apps",
       summary:
         "Fast sites that bring in calls, and web apps your staff and customers actually use: booking, quotes, ordering, member portals.",
@@ -97,6 +156,8 @@ export const content: SiteContent = {
     },
     {
       id: "apis",
+      dir: "apis",
+      icon: "nodes",
       name: "APIs & integrations",
       summary:
         "Connect the systems you already pay for — point of sale, QuickBooks, Square, Google — so data moves on its own instead of being retyped.",
@@ -104,6 +165,8 @@ export const content: SiteContent = {
     },
     {
       id: "android",
+      dir: "android-apps",
+      icon: "phone",
       name: "Android apps",
       summary:
         "Apps for your field crew or your customers, published on Google Play or installed directly on company phones.",
@@ -111,6 +174,8 @@ export const content: SiteContent = {
     },
     {
       id: "modernize",
+      dir: "fixes",
+      icon: "wrench",
       name: "Fixes, rescues & upgrades",
       summary:
         "A slow site, a broken form, an old system nobody can update. I'll find what's wrong, explain it in plain English, and fix it.",
@@ -126,6 +191,8 @@ export const content: SiteContent = {
       industry: "Restaurant",
       title: "Online ordering without the delivery-app fees",
       summary: "Pickup orders straight from the restaurant's own site, printed in the kitchen the moment they're paid.",
+      keyOutcome: "Keeps the margin that delivery apps used to take",
+      mockup: "ordering",
       problem:
         "Third-party apps were taking up to 30% of every order, and phone orders during the Friday rush meant missed calls and mistakes.",
       built: [
@@ -148,6 +215,8 @@ export const content: SiteContent = {
       industry: "Home services",
       title: "A field app that replaced paper work orders",
       summary: "Technicians see their day, log parts and photos, and collect signatures from an Android phone.",
+      keyOutcome: "Invoices go out the same day the job is done",
+      mockup: "field-service",
       problem:
         "Paper tickets came back to the office late, illegible, or not at all — so invoices went out days after the job.",
       built: [
@@ -170,6 +239,8 @@ export const content: SiteContent = {
       industry: "Personal care",
       title: "Booking and text reminders that cut no-shows",
       summary: "Clients book online at any hour and get a reminder the day before, with one tap to confirm or reschedule.",
+      keyOutcome: "Fewer empty chairs from forgotten appointments",
+      mockup: "booking",
       problem:
         "The front desk spent hours on the phone booking appointments, and no-shows were costing several chairs a week.",
       built: [
@@ -208,6 +279,13 @@ export const content: SiteContent = {
     "I'm a software developer based in Oklahoma City. I build for small and mid-sized businesses that need software shaped around how they actually work, not the other way around.",
     "I use Claude Code, an AI coding assistant, to move fast on the repetitive parts so more of your budget goes to the parts that matter: getting the details right, testing, and security.",
     "You'll always know what you're paying for, what's being built this week, and who to call.",
+  ],
+
+  howIWork: [
+    "Plain English, no jargon",
+    "Working software every week",
+    "Security and testing built in",
+    "Hosting and support handled",
   ],
 
   faqs: [

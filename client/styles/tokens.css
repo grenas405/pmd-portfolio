@@ -8,6 +8,14 @@
   src: url("../../node_modules/@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2") format("woff2-variations");
 }
 
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
+
 /* Metric-adjusted fallback keeps layout stable while Archivo loads. */
 @font-face {
   font-family: "Archivo Fallback";
@@ -21,14 +29,16 @@
 :root {
   /* Base palette */
   --dusk: #10202e;
-  --dusk-raised: #172b3b;
+  --dusk-deep: #0b1722;
+  --dusk-raised: #152837;
   --supercell: #1f4e5f;
   --wheat: #e9b949;
   --wheat-deep: #7f5500;
   --sky: #8ec3d3;
+  --red-dirt: #c4553a;
   --prairie: #eef2ec;
-  --noon: #e8f0f3;
-  --noon-raised: #f6f9fa;
+  --noon: #eef3f5;
+  --noon-raised: #ffffff;
   --slate: #3c5464;
   --mist: #a9bdc6;
 
@@ -36,41 +46,68 @@
 
   /* Semantic tokens resolve per color scheme. */
   --bg: light-dark(var(--noon), var(--dusk));
+  --bg-deep: light-dark(#e3ecef, var(--dusk-deep));
   --surface: light-dark(var(--noon-raised), var(--dusk-raised));
+  --surface-band: light-dark(#e6eef1, #0d1b27);
   --text: light-dark(var(--dusk), var(--prairie));
   --muted: light-dark(var(--slate), var(--mist));
   --accent: light-dark(var(--wheat-deep), var(--wheat));
+  --accent-soft: light-dark(rgb(233 185 73 / 0.22), rgb(233 185 73 / 0.12));
   --link: light-dark(#1b5c71, var(--sky));
-  --rule: light-dark(rgb(16 32 46 / 0.16), rgb(238 242 236 / 0.14));
+  --rule: light-dark(rgb(16 32 46 / 0.14), rgb(238 242 236 / 0.11));
+  --highlight: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.06));
+  --shadow: light-dark(0 24px 60px -30px rgb(16 32 46 / 0.35), 0 30px 70px -30px rgb(0 0 0 / 0.7));
   --button-bg: var(--wheat);
   --button-text: var(--dusk);
   --focus: light-dark(#0b6a86, var(--wheat));
-  --sky-top: light-dark(#a9cfdf, #0a1621);
-  --sky-mid: light-dark(#d7e7ec, #1b2b45);
-  --sky-horizon: light-dark(#f6dfa6, #8a4a3c);
-  --horizon-haze: light-dark(#f6dfa6, #6b3f3a);
-  --glow: light-dark(rgb(240 170 70 / 0.55), rgb(236 132 62 / 0.55));
-  --blade-base: light-dark(#2d6b5c, #1f4e5f);
-  --blade-tip: light-dark(#c9922a, var(--wheat));
+
+  /* Hero sky */
+  --sky-top: light-dark(#9fc7d8, #070f17);
+  --sky-mid: light-dark(#cfe2e9, #16264a);
+  --sky-horizon: light-dark(#f7d9a0, #8a4a3c);
+  --ground: light-dark(#e2ebe4, #0c1822);
+
+  /* Terminal */
+  /* No backdrop blur over the animated canvas (it doubles frame cost), so the glass is denser instead. */
+  --term-bg: light-dark(rgb(250 252 253 / 0.88), rgb(9 19 28 / 0.84));
+  --term-edge: light-dark(rgb(16 32 46 / 0.16), rgb(142 195 211 / 0.22));
+  --term-prompt: var(--accent);
+  --term-path: var(--link);
+  --term-error: light-dark(#a63d24, #e0785d);
+  --online: light-dark(#1f7a5c, #5fd1a4);
+
+  /* Glyph prairie (read by client/prairie/palette.js) */
+  --glyph-field-low: light-dark(#7fa79c, #1f4e5f);
+  --glyph-field-mid: light-dark(#2f6b4f, #c79b38);
+  --glyph-field-high: light-dark(#8a5a00, #fff3cf);
+  --glyph-sun-low: light-dark(#d9825c, #c4553a);
+  --glyph-sun-high: light-dark(#f2b43c, #ffd36b);
+  --glyph-mill: light-dark(#10202e, #050b10);
+  --glyph-noise: light-dark(#1b5c71, #8ec3d3);
+  --glyph-grid: light-dark(rgb(16 32 46 / 0.16), rgb(142 195 211 / 0.2));
 
   /* Type */
   --font: "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--2: 0.78rem;
   --step--1: 0.875rem;
   --step-0: 1.0625rem;
-  --step-1: 1.3125rem;
-  --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-  --step-3: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-  --step-4: clamp(2.5rem, 1rem + 6.4vw, 7rem);
+  --step-1: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --step-2: clamp(1.35rem, 1.15rem + 0.8vw, 1.85rem);
+  --step-3: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --step-4: clamp(2.4rem, 1rem + 5vw, 5.4rem);
   --wide: 125%;
   --semi-wide: 112%;
 
-  /* Space and layout */
+  /* Space, shape, layout */
   --gutter: clamp(1rem, 4vw, 3rem);
+  --page: 78rem;
+  --pad-inline: max(var(--gutter), calc((100% - var(--page)) / 2));
   --measure: 62ch;
-  --page: 76rem;
-  --section-space: clamp(5rem, 12vw, 10rem);
-  --radius-small: 0.375rem;
-  --radius-pill: 999rem;
+  --section-space: clamp(4.5rem, 9vw, 8rem);
+  --radius: 0.6rem;
+  --radius-lg: 1.1rem;
+  --header-height: 4.25rem;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }

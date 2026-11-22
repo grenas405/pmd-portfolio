@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { content, type SiteContent } from "../src/content";
 import { toMarkup } from "../src/html";
-import { caseStudyPage, errorPage, homePage } from "../src/views/pages";
+import { caseStudyPage, errorPage, homePage, nextCaseStudy } from "../src/views/pages";
+import { mockup } from "../src/views/mockups";
+import { metroMap } from "../src/views/map";
 import type { PageContext } from "../src/views/types";
 
 const ctx = (overrides: Partial<PageContext> = {}): PageContext => ({
   content,
-  assets: { js: "/assets/app.js", css: "/assets/styles.css", font: "/assets/font.woff2" },
+  assets: { js: "/assets/app.js", css: "/assets/styles.css", font: "/assets/font.woff2", mono: "/assets/mono.woff2" },
   theme: "dark",
   year: 2026,
   ...overrides,
@@ -19,7 +21,7 @@ describe("home page", () => {
 
   it("has exactly one h1 and every section", () => {
     expect(count(page, /<h1[\s>]/g)).toBe(1);
-    for (const id of ["services", "work", "process", "local", "about", "faq", "contact"]) {
+    for (const id of ["services", "work", "promise", "process", "local", "about", "faq", "contact"]) {
       expect(page).toContain(`id="${id}"`);
     }
   });
@@ -41,6 +43,27 @@ describe("home page", () => {
     expect(page).not.toMatch(/\sstyle="/);
     expect(page).not.toMatch(/<style\b/);
     expect(page).not.toMatch(/\son[a-z]+="/);
+  });
+
+  it("puts the terminal's typed text in the HTML for crawlers and screen readers", () => {
+    expect(page).toContain("cat howdy.txt");
+    expect(page).toContain(content.terminal.greeting.replace("'", "&#39;"));
+    for (const service of content.services) expect(page).toContain(`${service.dir}/`);
+  });
+
+  it("hides the testimonials section until there are real quotes", () => {
+    expect(page).not.toContain('class="quotes"');
+    const withQuotes = toMarkup(homePage(ctx({ content: { ...content, testimonials: [{ quote: "Great work.", name: "Ana", business: "Ana's Bakery" }] } })));
+    expect(withQuotes).toContain('class="quotes"');
+    expect(withQuotes).toContain('<span class="word">owners</span>');
+  });
+
+  it("shows a monogram until a portrait is set", () => {
+    expect(page).toContain("portrait__placeholder");
+    const withPhoto = toMarkup(
+      homePage(ctx({ content: { ...content, profile: { ...content.profile, portrait: { src: "/img/pedro.avif", alt: "Pedro", width: 800, height: 1000 } } } })),
+    );
+    expect(withPhoto).toContain('<img class="portrait__img" src="/img/pedro.avif" alt="Pedro" width="800" height="1000" loading="lazy"');
   });
 
   it("renders the saved theme on the root element", () => {
@@ -77,6 +100,30 @@ describe("case study page", () => {
 
   it("returns an explicit NotFound error for unknown slugs", () => {
     expect(caseStudyPage(ctx(), "nope")).toEqual({ ok: false, error: { kind: "NotFound", path: "/work/nope" } });
+  });
+});
+
+describe("mockups and map", () => {
+  it("hides decorative mockups from assistive tech", () => {
+    for (const kind of ["ordering", "field-service", "booking"] as const) {
+      expect(toMarkup(mockup(kind))).toMatch(/^<div class="mockup mockup--[a-z-]+" data-tilt aria-hidden="true">/);
+    }
+  });
+
+  it("labels the map and skips unknown cities", () => {
+    const svg = toMarkup(metroMap(["Oklahoma City", "Edmond", "Atlantis"]));
+    expect(svg).toContain('role="img"');
+    expect(svg).toContain(">Edmond</text>");
+    expect(svg).not.toContain("Atlantis");
+    expect(svg.match(/class="metro-map__road"/g)).toHaveLength(1);
+  });
+});
+
+describe("next project", () => {
+  it("wraps around to the first project", () => {
+    const last = content.caseStudies[content.caseStudies.length - 1]!;
+    expect(nextCaseStudy(content.caseStudies, last.slug)?.slug).toBe(content.caseStudies[0]!.slug);
+    expect(nextCaseStudy(content.caseStudies, "missing")).toBeUndefined();
   });
 });
 

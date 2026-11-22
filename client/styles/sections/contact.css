@@ -1,0 +1,71 @@
+/* The closing band: the prairie returns behind the phone number. */
+.contact {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(5rem, 12vw, 9rem) var(--pad-inline);
+  overflow: clip;
+  background: linear-gradient(to bottom, var(--bg) 0%, var(--sky-mid) 30%, var(--sky-horizon) 41.5%, var(--ground) 42.5%, var(--bg) 100%);
+}
+
+/* Keep the text readable over the field. */
+.contact::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right, color-mix(in oklab, var(--bg) 85%, transparent) 0%, color-mix(in oklab, var(--bg) 55%, transparent) 55%, transparent 85%);
+}
+
+.contact .prairie {
+  z-index: -2;
+}
+
+.contact__title {
+  margin-block-start: 0.85rem;
+  font-size: var(--step-3);
+  font-stretch: var(--wide);
+  letter-spacing: -0.025em;
+  max-inline-size: 18ch;
+}
+
+.contact__lede {
+  margin-block-start: 1rem;
+  font-size: var(--step-1);
+  color: var(--muted);
+}
+
+/* The memorable close: the phone number at display size. */
+.contact__phone {
+  display: inline-block;
+  margin-block-start: 1.75rem;
+  font-size: clamp(1.75rem, 8.4vw, 7.5rem);
+  font-stretch: var(--wide);
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--accent);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 3rem light-dark(transparent, rgb(233 185 73 / 0.25));
+}
+
+.contact__phone:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-start: 2.25rem;
+}
+
+.contact__more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin-block-start: 1.75rem;
+  font-size: var(--step--1);
+}

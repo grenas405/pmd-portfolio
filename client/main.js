@@ -3,13 +3,17 @@
  * one broken feature never takes the others down. Feature logic lives in the
  * imported modules.
  */
-import { createScope, engine } from "animejs";
-import { animateField, bladeSpecs, buildField, tiltWithPointer } from "./motion/field.js";
-import { gustThroughHeadline } from "./motion/hero.js";
-import { fieldSize, readEnvironment } from "./motion/prefs.js";
+import { drawIcons, drawOnScroll, lightSteps } from "./motion/draw.js";
+import { wireMagnetic } from "./motion/magnetic.js";
+import { revealTitles } from "./motion/reveal.js";
+import { wireMockups } from "./motion/tilt.js";
+import { startPrairie, VARIANTS } from "./prairie/scene.js";
+import { bootTerminal, showTerminal } from "./terminal/boot.js";
+import { wireClock, wirePrompt } from "./terminal/prompt.js";
 import { wireCopyButtons } from "./ui/copy.js";
 import { wireMenu } from "./ui/menu.js";
 import { wireMotionControl } from "./ui/pause.js";
+import { wireScrollspy } from "./ui/scrollspy.js";
 import { wireThemeToggle } from "./ui/theme.js";
 import { createToast } from "./ui/toast.js";
 
@@ -27,60 +31,88 @@ const safely = (name, feature) => {
 };
 
 /**
- * Defers work until the browser is idle so the field never competes with first paint.
- * @param {Window} win
- * @param {() => void} task
+ * @template {Element} T
+ * @param {ParentNode} root @param {string} selector
+ * @returns {T[]}
  */
-const whenIdle = (win, task) => {
-  if ("requestIdleCallback" in win) win.requestIdleCallback(task, { timeout: 800 });
-  else /** @type {Window} */ (win).setTimeout(task, 200);
-};
-
-/**
- * @param {Window} win
- * @param {HTMLElement} field
- */
-const startField = (win, field) => {
-  const env = readEnvironment(win);
-  const size = fieldSize(env);
-  const specs = bladeSpecs(size);
-  const { scene, blades } = buildField(win.document, size, specs);
-  field.append(scene);
-
-  const words = /** @type {HTMLElement[]} */ ([...win.document.querySelectorAll(".hero__title .word")]);
-  const toggle = win.document.querySelector("[data-motion-toggle]");
-
-  // The scope reverts every animation when reduced motion turns on, leaving the
-  // still field (each blade at its resting lean), and replays them when it turns off.
-  if (toggle instanceof HTMLButtonElement) wireMotionControl(win, toggle, field, engine);
-  createScope({ mediaQueries: { reduce: "(prefers-reduced-motion: reduce)" } }).add((scope) => {
-    const reduce = Boolean(scope?.matches.reduce);
-    if (toggle instanceof HTMLButtonElement) toggle.hidden = reduce;
-    if (reduce) return;
-    animateField(blades, specs, size);
-    gustThroughHeadline(words);
-    const stopTilt = env.finePointer ? tiltWithPointer(win, scene) : () => {};
-    return () => stopTilt();
-  });
-};
+const all = (root, selector) => /** @type {T[]} */ ([...root.querySelectorAll(selector)]);
 
 const main = (/** @type {Window} */ win) => {
   const doc = win.document;
+  const reduced = win.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = win.matchMedia("(pointer: fine)").matches;
   const region = doc.querySelector("[data-toast]");
   const toast = region instanceof HTMLElement ? createToast(win, region) : () => {};
+  const themeButton = doc.querySelector("[data-theme-toggle]");
 
   safely("theme", () => {
-    const button = doc.querySelector("[data-theme-toggle]");
-    if (button instanceof HTMLElement) wireThemeToggle(win, button);
+    if (themeButton instanceof HTMLElement) wireThemeToggle(win, themeButton);
   });
   safely("menu", () => {
     const menu = doc.getElementById("site-menu");
     if (menu) wireMenu(menu);
   });
-  safely("copy", () => wireCopyButtons(win, /** @type {NodeListOf<HTMLElement>} */ (doc.querySelectorAll("[data-copy]")), toast));
+  safely("copy", () => wireCopyButtons(win, all(doc, "[data-copy]"), toast));
+  safely("scrollspy", () => wireScrollspy(doc, all(doc, "[data-spy]")));
 
-  const field = doc.querySelector("[data-field]");
-  if (field instanceof HTMLElement) whenIdle(win, () => safely("field", () => startField(win, field)));
+  // Hero terminal: boot sequence, prompt, clock.
+  const term = doc.querySelector("[data-term]");
+  if (term instanceof HTMLElement) {
+    safely("boot", () => {
+      try {
+        if (reduced) showTerminal(term);
+        else bootTerminal(term);
+      } catch (error) {
+        showTerminal(term);
+        throw error;
+      }
+    });
+    safely("prompt", () => {
+      const form = doc.querySelector("[data-term-form]");
+      const log = doc.querySelector("[data-term-log]");
+      if (form instanceof HTMLFormElement && log instanceof HTMLElement)
+        wirePrompt(win, form, log, () => themeButton instanceof HTMLElement && themeButton.click());
+    });
+    safely("clock", () => {
+      const clock = doc.querySelector("[data-clock]");
+      if (clock instanceof HTMLElement) wireClock(win, clock);
+    });
+  }
+
+  // Prairie canvases (hero and closing band), all sharing one pause control.
+  /** @type {Array<{ setUserPaused: (paused: boolean) => void }>} */
+  const scenes = [];
+  for (const canvas of all(doc, "canvas[data-prairie]")) {
+    const options = VARIANTS[/** @type {HTMLCanvasElement} */ (canvas).dataset.prairie ?? ""];
+    if (!options) continue;
+    const cover = canvas.parentElement?.querySelector("[data-term]");
+    startPrairie(win, /** @type {HTMLCanvasElement} */ (canvas), options, cover instanceof HTMLElement ? cover : null)
+      .then((scene) => scenes.push(scene))
+      .catch((error) => console.error("[prairie] failed to start:", error));
+  }
+  safely("pause", () => {
+    const button = doc.querySelector("[data-motion-toggle]");
+    if (button instanceof HTMLButtonElement && !reduced) wireMotionControl(button, () => scenes);
+  });
+
+  // Scroll and pointer choreography. With reduced motion everything stays in its final, static state.
+  if (reduced) return;
+  safely("reveal", () => revealTitles(all(doc, "[data-reveal-title]")));
+  safely("icons", () => drawIcons(all(doc, ".trust .icon, .tile__icon .icon, .promise .icon")));
+  safely("process", () => {
+    const steps = doc.querySelector("[data-steps]");
+    if (!steps) return;
+    drawOnScroll(steps, all(steps, "[data-draw]"));
+    lightSteps(steps, all(steps, ".step"));
+  });
+  safely("map", () => {
+    const map = doc.querySelector("[data-map]");
+    if (map) drawOnScroll(map, all(map, ".metro-map__road"));
+  });
+  safely("mockups", () => wireMockups(all(doc, "[data-tilt]"), finePointer));
+  safely("magnetic", () => {
+    if (finePointer) wireMagnetic(all(doc, "[data-magnetic]"));
+  });
 };
 
 main(window);

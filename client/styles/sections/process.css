@@ -1,0 +1,116 @@
+.steps {
+  position: relative;
+}
+
+.steps__list {
+  display: grid;
+  gap: 2rem;
+  counter-reset: step;
+}
+
+.step {
+  counter-increment: step;
+  position: relative;
+  padding-inline-start: 2.25rem;
+}
+
+/* Mobile: a vertical track with a dot per step. */
+.step::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.5rem -2rem;
+  inset-inline-start: 0.45rem;
+  inline-size: 2px;
+  background: var(--rule);
+}
+
+.step:last-child::before {
+  display: none;
+}
+
+.step__dot {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.3rem;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.3rem var(--bg), 0 0 1.25rem color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+.step__name {
+  font-size: var(--step-1);
+  font-stretch: var(--semi-wide);
+}
+
+.step__name::before {
+  content: "0" counter(step) "  ";
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  color: var(--accent);
+  white-space: pre;
+}
+
+.step__detail {
+  margin-block-start: 0.5rem;
+  color: var(--muted);
+}
+
+.steps__line {
+  display: none;
+}
+
+/* Wide screens: a horizontal path drawn across the steps as you scroll. */
+@media (min-width: 56rem) {
+  .steps__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .step {
+    padding: 2.5rem 0 0;
+  }
+
+  .step::before {
+    inset: 0.45rem 0 auto -2rem;
+    inline-size: auto;
+    block-size: 2px;
+  }
+
+  .step:first-child::before {
+    inset-inline-start: 0;
+  }
+
+  .step:last-child::before {
+    display: block;
+  }
+
+  .step__dot {
+    inset-block-start: 0;
+  }
+
+  .steps__line {
+    position: absolute;
+    inset: 0.45rem 0 auto;
+    z-index: 0;
+    display: block;
+    inline-size: 100%;
+    block-size: 2px;
+    overflow: visible;
+  }
+
+  .steps__line path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 70%, transparent));
+  }
+
+  .step__dot {
+    z-index: 1;
+  }
+}

@@ -1,0 +1,218 @@
+.case {
+  padding: calc(var(--header-height) + 3rem) var(--pad-inline) 0;
+}
+
+.case__hero {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .case__hero {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+.case__back {
+  font-family: var(--mono);
+  font-size: var(--step--2);
+}
+
+.case__back::before {
+  content: "cd ../";
+  margin-inline-end: 0.5ch;
+  color: var(--muted);
+}
+
+.case__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-start: 2rem;
+  color: var(--muted);
+}
+
+.case__title {
+  margin-block-start: 1rem;
+  font-size: var(--step-4);
+  font-stretch: var(--wide);
+  font-weight: 820;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  max-inline-size: 15ch;
+}
+
+.case__summary {
+  max-inline-size: 52ch;
+  margin-block-start: 1.5rem;
+  font-size: var(--step-1);
+}
+
+.case__note {
+  max-inline-size: 52ch;
+  margin-block-start: 1rem;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.case__art {
+  display: grid;
+  place-items: center;
+  min-block-size: 30rem;
+  perspective: 1200px;
+  background: radial-gradient(60% 60% at 50% 45%, var(--accent-soft), transparent 70%);
+}
+
+.case__grid {
+  display: grid;
+  gap: 1rem;
+  margin-block-start: 4rem;
+}
+
+@media (min-width: 48rem) {
+  .case__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.case__card {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+}
+
+.case__card--accent {
+  border-block-start: 3px solid var(--accent);
+}
+
+.case__card h2 {
+  font-size: var(--step-1);
+  font-stretch: var(--semi-wide);
+  color: var(--accent);
+}
+
+.case__card p,
+.case__list {
+  margin-block-start: 1rem;
+}
+
+.case__list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.case__list li {
+  position: relative;
+  padding-inline-start: 1.1rem;
+}
+
+.case__list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.6em;
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.facts {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0 0;
+}
+
+.facts dt {
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0.15rem 0 0;
+}
+
+.case__next {
+  margin-block-start: 4rem;
+  border-block: 1px solid var(--rule);
+}
+
+.case__next a {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 2.5rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.case__next-label {
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  color: var(--accent);
+}
+
+.case__next-title {
+  font-size: var(--step-3);
+  font-stretch: var(--wide);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  transition: color 200ms;
+}
+
+.case__next a:hover .case__next-title {
+  color: var(--accent);
+}
+
+/* Error pages: a short terminal error over the prairie band. */
+.error-page {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-block-size: 82svh;
+  padding: calc(var(--header-height) + 3rem) var(--pad-inline) 4rem;
+  overflow: clip;
+  background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 30%, var(--sky-horizon) 41.5%, var(--ground) 42.5%, var(--bg) 100%);
+}
+
+.error-page .prairie {
+  z-index: -1;
+}
+
+.error-page__inner {
+  max-inline-size: 44rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background: var(--term-bg);
+  border: 1px solid var(--term-edge);
+  border-radius: var(--radius-lg);
+}
+
+.error-page__code {
+  margin-block-start: 0.25rem;
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--term-error);
+}
+
+.error-page__title {
+  margin-block-start: 1.25rem;
+  font-size: var(--step-3);
+  font-stretch: var(--wide);
+}
+
+.error-page__body {
+  margin-block-start: 0.75rem;
+  color: var(--muted);
+}
+
+.error-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-start: 1.75rem;
+}
