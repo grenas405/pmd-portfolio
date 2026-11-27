@@ -16,7 +16,7 @@ const SHOTS = [
   { name: "home-desktop-full", path: "/", viewport: { width: 1440, height: 900 }, fullPage: true },
   { name: "home-mobile", path: "/", viewport: { width: 390, height: 844 } },
   { name: "home-mobile-full", path: "/", viewport: { width: 390, height: 844 }, fullPage: true },
-  { name: "home-light", path: "/", viewport: { width: 1440, height: 900 }, theme: "light" },
+  { name: "home-dark", path: "/", viewport: { width: 1440, height: 900 }, theme: "dark" },
   { name: "home-reduced-motion", path: "/", viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" },
   { name: "case-desktop-full", path: "/work/field-service-app-for-an-hvac-company", viewport: { width: 1440, height: 900 }, fullPage: true },
   { name: "not-found", path: "/missing", viewport: { width: 1440, height: 900 } },

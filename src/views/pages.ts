@@ -111,17 +111,30 @@ const STATUS_COPY = {
 
 export type ErrorStatus = keyof typeof STATUS_COPY;
 
+/** A shop door with a "Sorry, we're closed" sign. Decorative. */
+const closedDoor = (): Html => html`<svg class="closed-door" viewBox="0 0 220 300" aria-hidden="true" focusable="false">
+  <rect class="closed-door__frame" x="10" y="10" width="200" height="290" rx="6"/>
+  <rect class="closed-door__glass" x="34" y="34" width="152" height="150" rx="4"/>
+  <path class="closed-door__string" d="M110 40L70 96M110 40l40 56"/>
+  <circle class="closed-door__nail" cx="110" cy="40" r="4"/>
+  <g class="closed-door__sign">
+    <rect x="44" y="94" width="132" height="64" rx="6"/>
+    <text x="110" y="122" text-anchor="middle" class="closed-door__sorry">Sorry,</text>
+    <text x="110" y="146" text-anchor="middle" class="closed-door__closed">we're closed</text>
+  </g>
+  <circle class="closed-door__knob" cx="186" cy="230" r="7"/>
+</svg>`;
+
 export const errorPage = (ctx: PageContext, status: ErrorStatus, path: string): Html => {
   const copy = STATUS_COPY[status];
-  const { profile, terminal } = ctx.content;
+  const { profile } = ctx.content;
   return layout(
     ctx,
     { title: `${copy.title} — ${profile.name}`, description: copy.body, path, ogType: "website", jsonLd: [], indexable: false },
     html`<section class="error-page" aria-labelledby="error-title">
-  <canvas class="prairie prairie--band" data-prairie="band" aria-hidden="true"></canvas>
-  <div class="error-page__inner">
-    <p class="path" aria-hidden="true">${terminal.user}@${terminal.host}:~$ cd ${path}</p>
-    <p class="error-page__code" aria-hidden="true">bash: cd: no such page (${copy.code})</p>
+  <div class="error-page__art">${closedDoor()}</div>
+  <div class="error-page__text">
+    <p class="error-page__code">Error ${copy.code}</p>
     <h1 id="error-title" class="error-page__title">${copy.title}</h1>
     <p class="error-page__body">${copy.body}</p>
     <p class="error-page__actions">

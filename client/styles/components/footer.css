@@ -51,7 +51,6 @@
 
 .site-footer h2 {
   margin-block-end: 0.9rem;
-  font-family: var(--mono);
   font-size: var(--step--2);
   font-weight: 500;
   color: var(--accent);

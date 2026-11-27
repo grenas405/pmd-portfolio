@@ -40,10 +40,10 @@ describe("sitemap", () => {
 });
 
 describe("themeFromCookie", () => {
-  it("defaults to dark and honours a saved light theme", () => {
-    expect(themeFromCookie(null)).toBe("dark");
-    expect(themeFromCookie("a=1; theme=light")).toBe("light");
-    expect(themeFromCookie("theme=lightish")).toBe("dark");
-    expect(themeFromCookie("xtheme=light")).toBe("dark");
+  it("defaults to light and honours a saved dark theme", () => {
+    expect(themeFromCookie(null)).toBe("light");
+    expect(themeFromCookie("a=1; theme=dark")).toBe("dark");
+    expect(themeFromCookie("theme=darkish")).toBe("light");
+    expect(themeFromCookie("xtheme=dark")).toBe("light");
   });
 });

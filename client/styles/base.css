@@ -116,16 +116,8 @@ svg {
 }
 
 ::selection {
-  background: var(--wheat);
-  color: var(--dusk);
-}
-
-/* A terminal path above section titles: the quiet Linux thread through the page. */
-.path {
-  font-family: var(--mono);
-  font-size: var(--step--2);
-  color: var(--link);
-  letter-spacing: 0.01em;
+  background: var(--gold);
+  color: var(--ink);
 }
 
 .word {

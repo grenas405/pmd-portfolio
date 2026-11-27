@@ -1,4 +1,4 @@
-/* Design tokens. Dark ("prairie dusk") is the default; light ("prairie noon") is opt-in. */
+/* Design tokens. Light ("Main Street by day") is the default; dark ("by evening") is opt-in. */
 @font-face {
   font-family: "Archivo";
   font-style: normal;
@@ -6,14 +6,6 @@
   font-weight: 100 900;
   font-stretch: 62% 125%;
   src: url("../../node_modules/@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2") format("woff2-variations");
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 800;
-  src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
 }
 
 /* Metric-adjusted fallback keeps layout stable while Archivo loads. */
@@ -27,75 +19,74 @@
 }
 
 :root {
-  /* Base palette */
-  --dusk: #10202e;
-  --dusk-deep: #0b1722;
-  --dusk-raised: #152837;
-  --supercell: #1f4e5f;
-  --wheat: #e9b949;
-  --wheat-deep: #7f5500;
-  --sky: #8ec3d3;
-  --red-dirt: #c4553a;
-  --prairie: #eef2ec;
-  --noon: #eef3f5;
-  --noon-raised: #ffffff;
-  --slate: #3c5464;
-  --mist: #a9bdc6;
+  /* Base palette: Main Street by day, and by evening. */
+  --paper: #fbfaf8;
+  --paper-raised: #ffffff;
+  --paper-band: #eef2f5;
+  --ink: #13294b;
+  --ink-soft: #46566f;
+  --red-dirt: #b5482f;
+  --red-dirt-bright: #e2785b;
+  --gold: #e9b949;
+  --sky: #cfe6f2;
+  --sage: #5f8a6e;
+  --night: #0f1d33;
+  --night-raised: #172a48;
+  --night-band: #0b1628;
+  --moonlight: #f1f4f8;
+  --mist: #a8b6c8;
 
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Semantic tokens resolve per color scheme. */
-  --bg: light-dark(var(--noon), var(--dusk));
-  --bg-deep: light-dark(#e3ecef, var(--dusk-deep));
-  --surface: light-dark(var(--noon-raised), var(--dusk-raised));
-  --surface-band: light-dark(#e6eef1, #0d1b27);
-  --text: light-dark(var(--dusk), var(--prairie));
-  --muted: light-dark(var(--slate), var(--mist));
-  --accent: light-dark(var(--wheat-deep), var(--wheat));
-  --accent-soft: light-dark(rgb(233 185 73 / 0.22), rgb(233 185 73 / 0.12));
-  --link: light-dark(#1b5c71, var(--sky));
-  --rule: light-dark(rgb(16 32 46 / 0.14), rgb(238 242 236 / 0.11));
+  --bg: light-dark(var(--paper), var(--night));
+  --bg-deep: light-dark(#e9eef3, var(--night-band));
+  --surface: light-dark(var(--paper-raised), var(--night-raised));
+  --surface-band: light-dark(var(--paper-band), var(--night-band));
+  --text: light-dark(var(--ink), var(--moonlight));
+  --muted: light-dark(var(--ink-soft), var(--mist));
+  --accent: light-dark(var(--red-dirt), var(--gold));
+  --accent-soft: light-dark(rgb(181 72 47 / 0.1), rgb(233 185 73 / 0.12));
+  --link: light-dark(#1d4f91, #9cc4ec);
+  --rule: light-dark(rgb(19 41 75 / 0.12), rgb(241 244 248 / 0.12));
   --highlight: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.06));
-  --shadow: light-dark(0 24px 60px -30px rgb(16 32 46 / 0.35), 0 30px 70px -30px rgb(0 0 0 / 0.7));
-  --button-bg: var(--wheat);
-  --button-text: var(--dusk);
-  --focus: light-dark(#0b6a86, var(--wheat));
+  --shadow: light-dark(0 24px 50px -28px rgb(19 41 75 / 0.35), 0 30px 70px -30px rgb(0 0 0 / 0.7));
+  --button-bg: light-dark(var(--red-dirt), var(--gold));
+  --button-text: light-dark(#ffffff, var(--night));
+  --button-glow: light-dark(rgb(181 72 47 / 0.35), rgb(233 185 73 / 0.45));
+  --focus: light-dark(#1d4f91, var(--gold));
+  --online: light-dark(var(--sage), #6fd3a0);
 
-  /* Hero sky */
-  --sky-top: light-dark(#9fc7d8, #070f17);
-  --sky-mid: light-dark(#cfe2e9, #16264a);
-  --sky-horizon: light-dark(#f7d9a0, #8a4a3c);
-  --ground: light-dark(#e2ebe4, #0c1822);
-
-  /* Terminal */
-  /* No backdrop blur over the animated canvas (it doubles frame cost), so the glass is denser instead. */
-  --term-bg: light-dark(rgb(250 252 253 / 0.88), rgb(9 19 28 / 0.84));
-  --term-edge: light-dark(rgb(16 32 46 / 0.16), rgb(142 195 211 / 0.22));
-  --term-prompt: var(--accent);
-  --term-path: var(--link);
-  --term-error: light-dark(#a63d24, #e0785d);
-  --online: light-dark(#1f7a5c, #5fd1a4);
-
-  /* Glyph prairie (read by client/prairie/palette.js) */
-  --glyph-field-low: light-dark(#7fa79c, #1f4e5f);
-  --glyph-field-mid: light-dark(#2f6b4f, #c79b38);
-  --glyph-field-high: light-dark(#8a5a00, #fff3cf);
-  --glyph-sun-low: light-dark(#d9825c, #c4553a);
-  --glyph-sun-high: light-dark(#f2b43c, #ffd36b);
-  --glyph-mill: light-dark(#10202e, #050b10);
-  --glyph-noise: light-dark(#1b5c71, #8ec3d3);
-  --glyph-grid: light-dark(rgb(16 32 46 / 0.16), rgb(142 195 211 / 0.2));
+  /* Main Street scene */
+  --sky-top: light-dark(#bcdcef, #0b1730);
+  --sky-bottom: light-dark(#f4ead6, #2b2f52);
+  --sun: light-dark(#f6c453, #f2efe3);
+  --cloud: light-dark(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.08));
+  --skyline: light-dark(#a9c1d6, #22355a);
+  --skyline-bridge: light-dark(#7d9bb8, #3c5785);
+  --sidewalk: light-dark(#d9d3c7, #283651);
+  --road: light-dark(#4a5568, #141d30);
+  --lane: light-dark(#f2e3b3, #b89a4a);
+  --shop-cafe: light-dark(#b5482f, #7e3524);
+  --shop-salon: light-dark(#5f8a6e, #3e5f4a);
+  --shop-boutique: light-dark(#1d4f91, #1e3a66);
+  --shop-trim: light-dark(#f3ede2, #d9d2c3);
+  --window: light-dark(#d6e6ef, #1b2740);
+  --window-lit: light-dark(rgb(255 236 179 / 0.75), rgb(255 205 110 / 0.92));
+  --awning-stripe: light-dark(#ffffff, #e8e1d3);
+  --sign-open: light-dark(#2f8f5b, #63e6a0);
+  --sign-closed: light-dark(#8a94a6, #5b6578);
+  --car: light-dark(#e9b949, #e9b949);
 
   /* Type */
   --font: "Archivo", "Archivo Fallback", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --step--2: 0.78rem;
   --step--1: 0.875rem;
   --step-0: 1.0625rem;
   --step-1: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
   --step-2: clamp(1.35rem, 1.15rem + 0.8vw, 1.85rem);
   --step-3: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
-  --step-4: clamp(2.4rem, 1rem + 5vw, 5.4rem);
+  --step-4: clamp(2.4rem, 1rem + 4.4vw, 4.9rem);
   --wide: 125%;
   --semi-wide: 112%;
 
@@ -112,6 +103,6 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }

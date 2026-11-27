@@ -26,10 +26,6 @@
   }
 }
 
-.section-head .path {
-  margin-block-end: 0.85rem;
-}
-
 .section-title {
   font-size: var(--step-3);
   font-stretch: var(--wide);

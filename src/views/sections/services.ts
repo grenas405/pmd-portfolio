@@ -16,6 +16,6 @@ const tile = (item: Service, featured: boolean): Html => html`<li class="tile${f
 </li>`;
 
 export const services = (content: SiteContent): Html => html`<section class="section" id="services" aria-labelledby="services-title">
-  ${sectionHeader("services", "services", "What I build", "Software shaped around how your business already works, from a fast website to a full custom app.")}
+  ${sectionHeader("services", "What I build", "Software shaped around how your business already works, from a fast website to a full custom app.")}
   <ul class="bento">${content.services.map((item, i) => tile(item, i === 0))}</ul>
 </section>`;

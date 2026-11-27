@@ -1,344 +1,97 @@
-/* prairie.sh: a glass terminal over a glyph prairie at dusk. */
+/* Hero: the pitch on the left, Main Street on the right. */
 .hero {
-  position: relative;
-  isolation: isolate;
   display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
   align-items: center;
-  min-block-size: 100svh;
-  padding: calc(var(--header-height) + 1.5rem) var(--pad-inline) 2.5rem;
-  overflow: clip;
-  /* Sky down to the horizon (60%, matching the canvas), then the ground. */
+  min-block-size: min(100svh, 62rem);
+  padding: calc(var(--header-height) + clamp(1.5rem, 4vw, 3rem)) var(--pad-inline) clamp(2.5rem, 5vw, 4rem);
   background:
-    radial-gradient(34% 30% at 86% 60%, rgb(236 132 62 / 0.38), transparent 70%),
-    linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 38%, var(--sky-horizon) 59.5%, var(--ground) 60.5%, var(--bg) 100%);
+    radial-gradient(60% 50% at 85% 20%, light-dark(rgb(233 185 73 / 0.16), rgb(29 79 145 / 0.25)), transparent 70%),
+    var(--bg);
 }
 
-.prairie {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-}
-
-.hero__inner {
-  display: grid;
-  gap: 1.25rem;
-  inline-size: 100%;
-}
-
-/* The terminal window */
-.term {
-  max-inline-size: 58rem;
-  background: var(--term-bg);
-  border: 1px solid var(--term-edge);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow), inset 0 1px 0 var(--highlight);
-  overflow: hidden;
-}
-
-.term__bar {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  /* Fixed height so revealing the pause button later doesn't shift the page. */
-  block-size: 2.9rem;
-  padding: 0.55rem 0.9rem;
-  font-family: var(--mono);
-  font-size: var(--step--2);
-  color: var(--muted);
-  background: light-dark(rgb(16 32 46 / 0.04), rgb(255 255 255 / 0.03));
-  border-block-end: 1px solid var(--rule);
-}
-
-.term__dots {
-  display: inline-flex;
-  gap: 0.4rem;
-}
-
-.term__dots i {
-  inline-size: 0.7rem;
-  block-size: 0.7rem;
-  border-radius: 50%;
-  background: var(--red-dirt);
-}
-
-.term__dots i:nth-child(2) {
-  background: var(--wheat);
-}
-
-.term__dots i:nth-child(3) {
-  background: var(--supercell);
-}
-
-.term__title {
-  color: var(--text);
-}
-
-.term__tabs {
-  display: none;
-  gap: 0.25rem;
-}
-
-.term__tabs span {
-  padding: 0.05rem 0.45rem;
-  border-radius: 0.25rem;
-}
-
-.term__tabs .is-on {
-  color: var(--dusk);
-  background: var(--accent);
-}
-
-@media (min-width: 48rem) {
-  .term__tabs {
-    display: inline-flex;
+@media (min-width: 60rem) {
+  .hero {
+    grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
   }
-}
-
-.term__clock {
-  margin-inline-start: auto;
-  white-space: nowrap;
-}
-
-.term__pause {
-  display: grid;
-  place-items: center;
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
-  padding: 0;
-  color: var(--text);
-  background: none;
-  border: 1px solid var(--rule);
-  border-radius: 0.35rem;
-  cursor: pointer;
-}
-
-/* Pause bars; a play triangle when pressed. */
-.term__pause-icon {
-  inline-size: 0.55rem;
-  block-size: 0.65rem;
-  border-inline: 0.18rem solid currentColor;
-}
-
-.term__pause[aria-pressed="true"] .term__pause-icon {
-  inline-size: 0;
-  block-size: 0;
-  border-inline: 0;
-  border-block: 0.35rem solid transparent;
-  border-inline-start: 0.55rem solid currentColor;
-}
-
-.term__body {
-  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.25rem);
-}
-
-.term__line,
-.term__out,
-.term__ls,
-.term__input {
-  font-family: var(--mono);
-  font-size: clamp(0.8rem, 0.75rem + 0.25vw, 0.95rem);
-  line-height: 1.6;
-}
-
-.term__prompt {
-  color: var(--term-prompt);
-}
-
-.term__line {
-  min-block-size: 1.6em;
-}
-
-.term__cmd {
-  color: var(--text);
-}
-
-.term__out {
-  color: var(--muted);
-}
-
-.term__out--error {
-  color: var(--term-error);
-}
-
-.hero__title {
-  margin-block: 1rem 1rem;
-  font-size: clamp(2.2rem, 0.9rem + 3.8vw, 4.4rem);
-  font-stretch: var(--wide);
-  font-weight: 820;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  text-shadow: 0 0 2.5rem light-dark(transparent, rgb(233 185 73 / 0.18));
-}
-
-/* Lines are inline so the headline wraps to fit the window, balanced. */
-.line {
-  display: inline;
-}
-
-.line + .line::before {
-  content: " ";
-}
-
-.hero__intro {
-  max-inline-size: 54ch;
-  margin-block-end: 1rem;
-  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.term__ls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
-}
-
-.term__ls a {
-  color: var(--term-path);
-  text-decoration: none;
-}
-
-.term__ls a:hover {
-  text-decoration: underline;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-block-start: 1.25rem;
-}
-
-.term__log:not(:empty) {
-  margin-block-start: 1rem;
-}
-
-.term__input {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-block-start: 1rem;
-  padding-block: 0.35rem;
-  border-block-end: 1px dashed var(--rule);
-}
-
-/* The prompt only works with JS. Its space is reserved up front so it appears without a layout shift. */
-@media (scripting: none) {
-  .term__input {
-    display: none;
-  }
-}
-
-.term__input:not(.is-ready) {
-  visibility: hidden;
-}
-
-.term__input:focus-within {
-  border-block-end-color: var(--accent);
-}
-
-.term__input input {
-  flex: 1;
-  min-inline-size: 0;
-  padding: 0;
-  font: inherit;
-  color: var(--text);
-  caret-color: var(--accent);
-  background: none;
-  border: 0;
-  outline: none;
-}
-
-.term__input input::placeholder {
-  color: color-mix(in oklab, var(--muted) 60%, transparent);
-}
-
-/* Boot sequence: hidden only while the script is expected to animate it, with a
-   timed fallback so the text always appears even if the script never runs. */
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  .term:not(.is-booted) [data-boot-out],
-  .term:not(.is-booting):not(.is-booted) [data-type] {
-    opacity: 0;
-    animation: boot-fallback 0s 6s forwards;
-  }
-
-  .term.is-booting [data-type]:not(:empty)::after {
-    content: "";
-    display: inline-block;
-    inline-size: 0.55em;
-    block-size: 1.1em;
-    margin-inline-start: 0.1em;
-    vertical-align: text-bottom;
-    background: var(--accent);
-    animation: blink 1s steps(1) infinite;
-  }
-}
-
-@keyframes boot-fallback {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* Under the window: availability and three promises. */
-/* A glass strip under the window, so it stays readable over the field. */
-.hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 2rem;
-  max-inline-size: 58rem;
-  padding: 0.6rem 0.75rem;
-  background: var(--term-bg);
-  border: 1px solid var(--term-edge);
-  border-radius: var(--radius-lg);
 }
 
 .availability {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.3rem 0.7rem;
-  font-family: var(--mono);
-  font-size: var(--step--2);
+  padding: 0.35rem 0.85rem;
+  font-size: var(--step--1);
+  font-weight: 600;
   color: var(--text);
   background: color-mix(in oklab, var(--online) 12%, transparent);
-  border-radius: var(--radius);
+  border: 1px solid color-mix(in oklab, var(--online) 30%, transparent);
+  border-radius: 999px;
 }
 
 .availability__dot {
-  inline-size: 0.5rem;
-  block-size: 0.5rem;
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
   border-radius: 50%;
   background: var(--online);
   box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--online) 25%, transparent);
 }
 
+.hero__title {
+  margin-block-start: 1.25rem;
+  /* Sized so the longest word ("businesses.") always fits its column. */
+  font-size: clamp(2.2rem, 0.9rem + 2.9vw, 3.75rem);
+  overflow-wrap: normal;
+  font-stretch: var(--wide);
+  font-weight: 820;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.hero__intro {
+  max-inline-size: 46ch;
+  margin-block-start: 1.25rem;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-start: 1.75rem;
+}
+
 .trust {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
+  gap: 0.6rem 1.4rem;
+  margin-block-start: 1.75rem;
 }
 
 .trust li {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   font-size: var(--step--1);
-  color: var(--text);
+  font-weight: 600;
 }
 
 .trust .icon {
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
   color: var(--accent);
+}
+
+.trust__reviews a {
+  display: inline-flex;
+  gap: 0.45rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.trust__stars {
+  color: var(--gold);
+  letter-spacing: 0.08em;
 }

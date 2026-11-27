@@ -87,7 +87,7 @@
 .device__address {
   flex: 1;
   padding: 0.15rem 0.6rem;
-  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
   font-size: 0.6rem;
   color: #5c6c77;
   background: #fff;
@@ -213,7 +213,7 @@
 }
 
 .ui__time {
-  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
   color: #1f4e5f;
 }
 

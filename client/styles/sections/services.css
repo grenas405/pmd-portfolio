@@ -58,7 +58,6 @@
 
 .tile__label {
   margin-block-start: 1.25rem;
-  font-family: var(--mono);
   font-size: var(--step--2);
   color: var(--accent);
 }

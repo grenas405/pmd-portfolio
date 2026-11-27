@@ -30,15 +30,17 @@ export type Profile = {
   readonly links: ReadonlyArray<{ readonly label: string; readonly href: string }>;
   /** Leave undefined to show the monogram placeholder. */
   readonly portrait?: Portrait;
+  /** Your Google (or other) review summary. Leave undefined until it's real; the badge stays hidden. */
+  readonly reviews?: Reviews;
 };
+
+export type Reviews = { readonly rating: number; readonly count: number; readonly source: string; readonly url: string };
 
 /** Names of the line icons in src/views/icons.ts. */
 export type IconName = "browser" | "nodes" | "phone" | "wrench" | "price" | "key" | "clock" | "pin";
 
 export type Service = {
   readonly id: string;
-  /** Directory name shown by `ls services/` in the hero terminal. */
-  readonly dir: string;
   readonly icon: IconName;
   readonly name: string;
   readonly summary: string;
@@ -60,6 +62,9 @@ export type CaseStudy = {
   readonly summary: string;
   /** The single result shown on the project card. */
   readonly keyOutcome: string;
+  /** Plain-language before → after shown on the project card. */
+  readonly before: string;
+  readonly after: string;
   readonly mockup: MockupKind;
   readonly problem: string;
   readonly built: readonly string[];
@@ -77,18 +82,27 @@ export type Guarantee = { readonly icon: IconName; readonly title: string; reado
 /** Only real, attributable quotes. The section stays hidden while this list is empty. */
 export type Testimonial = { readonly quote: string; readonly name: string; readonly business: string };
 
-export type Terminal = {
-  readonly user: string;
-  readonly host: string;
-  readonly greetingFile: string;
-  readonly greeting: string;
+/** The storefronts on the hero's Main Street. Names are generic on purpose. */
+export type ShopKind = "cafe" | "salon" | "boutique";
+
+export type Shop = {
+  readonly kind: ShopKind;
+  readonly name: string;
+  /** Short notifications the shop "receives" in the hero animation. */
+  readonly notifications: readonly string[];
+};
+
+export type Street = {
+  readonly shops: readonly Shop[];
+  /** Read by screen readers in place of the decorative scene. */
+  readonly description: string;
 };
 
 export type SiteContent = {
   readonly profile: Profile;
   readonly headline: readonly string[];
   readonly intro: string;
-  readonly terminal: Terminal;
+  readonly street: Street;
   /** One line shown under the hero, e.g. when you can take new work. */
   readonly availability: string;
   readonly guarantees: readonly Guarantee[];
@@ -124,11 +138,13 @@ export const content: SiteContent = {
   // Each entry is one line of the hero headline.
   headline: ["Custom software", "for Oklahoma City", "businesses."],
 
-  terminal: {
-    user: "pedro",
-    host: "okc",
-    greetingFile: "howdy.txt",
-    greeting: "Howdy, y'all. Pull up a chair.",
+  street: {
+    description: "Illustration: three shops on a main street receiving online orders, appointment bookings, and sales.",
+    shops: [
+      { kind: "cafe", name: "Corner Café", notifications: ["New pickup order · $42.50", "Online order · $18.75", "Catering request · Friday"] },
+      { kind: "salon", name: "Main St. Salon", notifications: ["Booked: Haircut at 2:30", "Confirmed: Color at 4:00", "Booked: Trim tomorrow 10:00"] },
+      { kind: "boutique", name: "The Boutique", notifications: ["Online sale · $68.00", "Curbside pickup ready", "New 5-star review"] },
+    ],
   },
 
   availability: "Booking new projects for January 2027",
@@ -147,7 +163,6 @@ export const content: SiteContent = {
   services: [
     {
       id: "web-apps",
-      dir: "web-apps",
       icon: "browser",
       name: "Websites & web apps",
       summary:
@@ -156,7 +171,6 @@ export const content: SiteContent = {
     },
     {
       id: "apis",
-      dir: "apis",
       icon: "nodes",
       name: "APIs & integrations",
       summary:
@@ -165,7 +179,6 @@ export const content: SiteContent = {
     },
     {
       id: "android",
-      dir: "android-apps",
       icon: "phone",
       name: "Android apps",
       summary:
@@ -174,7 +187,6 @@ export const content: SiteContent = {
     },
     {
       id: "modernize",
-      dir: "fixes",
       icon: "wrench",
       name: "Fixes, rescues & upgrades",
       summary:
@@ -192,6 +204,8 @@ export const content: SiteContent = {
       title: "Online ordering without the delivery-app fees",
       summary: "Pickup orders straight from the restaurant's own site, printed in the kitchen the moment they're paid.",
       keyOutcome: "Keeps the margin that delivery apps used to take",
+      before: "Phone orders during the rush, and up to 30% of every app order lost to fees",
+      after: "Customers order from the restaurant's own site in two taps",
       mockup: "ordering",
       problem:
         "Third-party apps were taking up to 30% of every order, and phone orders during the Friday rush meant missed calls and mistakes.",
@@ -216,6 +230,8 @@ export const content: SiteContent = {
       title: "A field app that replaced paper work orders",
       summary: "Technicians see their day, log parts and photos, and collect signatures from an Android phone.",
       keyOutcome: "Invoices go out the same day the job is done",
+      before: "Paper tickets, retyped at the office days later",
+      after: "Jobs, photos, and signatures captured on the phone, invoiced the same day",
       mockup: "field-service",
       problem:
         "Paper tickets came back to the office late, illegible, or not at all — so invoices went out days after the job.",
@@ -240,6 +256,8 @@ export const content: SiteContent = {
       title: "Booking and text reminders that cut no-shows",
       summary: "Clients book online at any hour and get a reminder the day before, with one tap to confirm or reschedule.",
       keyOutcome: "Fewer empty chairs from forgotten appointments",
+      before: "Hours on the phone booking, and no-shows every week",
+      after: "Clients book online any time and get a reminder the day before",
       mockup: "booking",
       problem:
         "The front desk spent hours on the phone booking appointments, and no-shows were costing several chairs a week.",

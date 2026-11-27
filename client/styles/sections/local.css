@@ -52,7 +52,6 @@
   stroke: var(--bg);
   stroke-width: 5px;
   stroke-linejoin: round;
-  font-family: var(--mono);
   font-size: 11px;
 }
 

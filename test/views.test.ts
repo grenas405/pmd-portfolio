@@ -8,8 +8,8 @@ import type { PageContext } from "../src/views/types";
 
 const ctx = (overrides: Partial<PageContext> = {}): PageContext => ({
   content,
-  assets: { js: "/assets/app.js", css: "/assets/styles.css", font: "/assets/font.woff2", mono: "/assets/mono.woff2" },
-  theme: "dark",
+  assets: { js: "/assets/app.js", css: "/assets/styles.css", font: "/assets/font.woff2" },
+  theme: "light",
   year: 2026,
   ...overrides,
 });
@@ -45,10 +45,38 @@ describe("home page", () => {
     expect(page).not.toMatch(/\son[a-z]+="/);
   });
 
-  it("puts the terminal's typed text in the HTML for crawlers and screen readers", () => {
-    expect(page).toContain("cat howdy.txt");
-    expect(page).toContain(content.terminal.greeting.replace("'", "&#39;"));
-    for (const service of content.services) expect(page).toContain(`${service.dir}/`);
+  it("draws one storefront per shop, hidden from assistive tech but described", () => {
+    for (const shop of content.street.shops) expect(page).toContain(`class="shop shop--${shop.kind}"`);
+    expect(page).toContain('data-street-scene aria-hidden="true"');
+    expect(page).toContain(`<p class="visually-hidden">${content.street.description}</p>`);
+  });
+
+  it("ships every shop's notifications for the animation, escaped", () => {
+    const first = content.street.shops[0]!;
+    expect(page).toContain(`data-messages="${first.notifications.join("\n")}"`);
+  });
+
+  it("has no terminal or prairie leftovers", () => {
+    for (const leftover of ["data-term", "prairie", "~/okc", "howdy.txt", "exit 0"]) expect(page).not.toContain(leftover);
+  });
+
+  it("shows a reviews badge only once real reviews are set", () => {
+    expect(page).not.toContain("trust__reviews");
+    const reviewed = toMarkup(
+      homePage(ctx({ content: { ...content, profile: { ...content.profile, reviews: { rating: 4.9, count: 27, source: "Google", url: "https://g.page/x" } } } })),
+    );
+    expect(reviewed).toContain("4.9 from 27 Google reviews");
+  });
+
+  it("shows before and after for every project", () => {
+    for (const study of content.caseStudies) {
+      expect(page).toContain(study.before.replace("'", "&#39;"));
+      expect(page).toContain(study.after.replace("'", "&#39;"));
+    }
+  });
+
+  it("includes the mobile call bar", () => {
+    expect(page).toContain('<div class="callbar" data-callbar>');
   });
 
   it("hides the testimonials section until there are real quotes", () => {
@@ -67,7 +95,7 @@ describe("home page", () => {
   });
 
   it("renders the saved theme on the root element", () => {
-    expect(toMarkup(homePage(ctx({ theme: "light" })))).toContain('<html lang="en" data-theme="light">');
+    expect(toMarkup(homePage(ctx({ theme: "dark" })))).toContain('<html lang="en" data-theme="dark">');
   });
 });
 
@@ -128,6 +156,12 @@ describe("next project", () => {
 });
 
 describe("error page", () => {
+  it("shows the closed sign", () => {
+    const page = toMarkup(errorPage(ctx(), 404, "/missing"));
+    expect(page).toContain(">we're closed</text>");
+    expect(page).toContain("That page isn&#39;t here.");
+  });
+
   it("is not indexable", () => {
     expect(toMarkup(errorPage(ctx(), 404, "/missing"))).toContain('<meta name="robots" content="noindex">');
   });

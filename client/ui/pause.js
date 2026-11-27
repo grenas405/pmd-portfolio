@@ -2,7 +2,7 @@
 export const toggleLabel = (paused) => (paused ? "Play animation" : "Pause animation");
 
 /**
- * The visible pause control (WCAG 2.2.2). It pauses every running prairie scene.
+ * The visible pause control (WCAG 2.2.2). It pauses every running hero scene.
  * @param {HTMLButtonElement} button
  * @param {() => Array<{ setUserPaused: (paused: boolean) => void }>} scenes
  */

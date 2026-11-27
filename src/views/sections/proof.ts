@@ -12,7 +12,7 @@ const quote = (item: Testimonial): Html => html`<figure class="quote">
 export const proof = (content: SiteContent): Html => {
   const hasQuotes = content.testimonials.length > 0;
   return html`<section class="section" id="promise" aria-labelledby="promise-title">
-  ${sectionHeader("promise", "promise", hasQuotes ? "What owners say" : "What you can count on")}
+  ${sectionHeader("promise", hasQuotes ? "What owners say" : "What you can count on")}
   ${hasQuotes ? html`<div class="quotes">${content.testimonials.map(quote)}</div>` : html``}
   <ul class="promises">
     ${content.guarantees.map(

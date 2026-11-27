@@ -1,5 +1,36 @@
 # Changes
 
+## 0.3.0 — 2026-11-27
+
+A new theme, "Main Street, open for business," built for local business owners rather than developers.
+
+### Changed
+- **Hero:** an animated Main Street replaces the Linux terminal and ASCII prairie.
+  - It has three storefronts (café, salon, boutique) under the OKC skyline (Devon Tower, the Skydance Bridge).
+  - In the opening, the shops rise, the awnings unroll, the lights come on and the signs flip from CLOSED to OPEN.
+  - During the "business day", the shops ping with orders, bookings and sales, and the owner's phone counts them.
+  - A car and a scissor-tailed flycatcher pass by, the layers move with the pointer for depth, and there's a Pause button.
+  - Reduced motion shows a still, open-for-business scene.
+- **Theme:**
+  - Light-first ("Main Street by day") with navy, red-dirt and prairie-gold colors; dark mode becomes an evening street with glowing windows.
+  - Archivo is the only typeface.
+  - A new awning logo and favicon.
+- **Projects:** each card shows a plain-language before → after.
+- **Contact band:** the OKC skyline at golden hour.
+- **404:** a shop door with a "Sorry, we're closed" sign.
+- **Copy:** the `~/okc/…` path lines, `cd ../` and `exit 0` flourishes are gone.
+
+### Added
+- A sticky Call/Text bar on phones. It appears once the hero's buttons scroll away and hides again near the contact section.
+- An optional reviews badge (`profile.reviews`). It is hidden until real reviews exist.
+
+### Fixed
+- Rebuilding the client while `npm run dev` was running made every asset 404 until the server restarted. The build script used to delete and recreate `public/assets`, which `wrangler dev` stops watching. It now empties the directory instead.
+- The README's Architecture section, accidentally dropped in 0.2.0, is restored and updated.
+
+### Removed
+- The terminal (`client/terminal/`), the canvas prairie (`client/prairie/`) and the JetBrains Mono font.
+
 ## 0.2.0 — 2026-11-22
 
 A redesign to look more professional, with a new futuristic, Linux-themed hero and a fix for the hero's poor animation performance.

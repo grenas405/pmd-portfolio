@@ -1,6 +1,6 @@
 {
   "name": "pmd-portfolio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Portfolio of Pedro M. Dominguez — pedromdominguez.dev, served by a Cloudflare Worker.",
@@ -21,7 +21,6 @@
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.9.0",
     "@fontsource-variable/archivo": "5.3.0",
-    "@fontsource-variable/jetbrains-mono": "5.3.0",
     "esbuild": "0.28.2",
     "playwright": "1.65.1",
     "typescript": "7.0.2",

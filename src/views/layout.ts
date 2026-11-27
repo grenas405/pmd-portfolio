@@ -1,7 +1,8 @@
 import { html, jsonScript, type Html } from "../html";
+import { logoMark } from "./logo";
 import type { PageContext, PageMeta } from "./types";
 
-const THEME_COLOR = { dark: "#10202e", light: "#e8f0f3" } as const;
+const THEME_COLOR = { dark: "#0f1d33", light: "#fbfaf8" } as const;
 
 const head = (ctx: PageContext, meta: PageMeta): Html => {
   const url = ctx.content.profile.url + meta.path;
@@ -15,7 +16,6 @@ const head = (ctx: PageContext, meta: PageMeta): Html => {
 <meta name="theme-color" content="${THEME_COLOR[ctx.theme]}">
 ${meta.indexable ? html`<link rel="canonical" href="${url}">` : html`<meta name="robots" content="noindex">`}
 <link rel="preload" href="${ctx.assets.font}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="${ctx.assets.mono}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${ctx.assets.css}">
 <script type="module" src="${ctx.assets.js}"></script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -40,11 +40,6 @@ const NAV = [
   { href: "/#process", label: "Process" },
   { href: "/#faq", label: "Questions" },
 ] as const;
-
-/** Three blades of grass: the site's mark (also favicon.svg). */
-const logoMark = (): Html => html`<svg class="brand__mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
-  <g fill="none" stroke-linecap="round" stroke-width="6"><path d="M18 54 Q17 34 11 18" class="brand__blade brand__blade--1"/><path d="M32 54 Q32 30 37 10" class="brand__blade brand__blade--2"/><path d="M46 54 Q46 36 53 22" class="brand__blade brand__blade--3"/></g>
-</svg>`;
 
 const header = (ctx: PageContext): Html => {
   const { profile } = ctx.content;
@@ -83,7 +78,7 @@ const footer = (ctx: PageContext): Html => {
   </div>
   <div class="site-footer__bottom">
     <p>Serving ${serviceArea.join(", ")}.</p>
-    <p><span class="path" aria-hidden="true">exit 0</span> © ${ctx.year} ${profile.name}</p>
+    <p>© ${ctx.year} ${profile.name}</p>
   </div>
 </footer>`;
 };
@@ -99,6 +94,10 @@ ${header(ctx)}
 ${main}
 </main>
 ${footer(ctx)}
+<div class="callbar" data-callbar>
+  <a class="button button--primary" href="tel:${ctx.content.profile.phone}">Call</a>
+  <a class="button button--ghost" href="sms:${ctx.content.profile.phone}">Text</a>
+</div>
 <output class="toast" data-toast role="status" aria-live="polite"></output>
 </body>
 </html>`;

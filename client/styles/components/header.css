@@ -46,16 +46,19 @@
   block-size: 1.75rem;
 }
 
-.brand__blade--1 {
-  stroke: var(--sky);
+.logo__door {
+  fill: var(--gold);
 }
 
-.brand__blade--2 {
-  stroke: var(--wheat);
+.logo__awning,
+.logo__scallop {
+  fill: var(--red-dirt);
 }
 
-.brand__blade--3 {
-  stroke: var(--red-dirt);
+.logo__stripe {
+  fill: none;
+  stroke: var(--paper);
+  stroke-width: 3;
 }
 
 .site-nav {

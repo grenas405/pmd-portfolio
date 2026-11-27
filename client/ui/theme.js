@@ -1,13 +1,13 @@
 /** @typedef {"dark" | "light"} Theme */
 
-const THEME_COLOR = /** @type {const} */ ({ dark: "#10202e", light: "#e8f0f3" });
+const THEME_COLOR = /** @type {const} */ ({ dark: "#0f1d33", light: "#fbfaf8" });
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 /**
  * @param {string | undefined} value
  * @returns {Theme}
  */
-export const parseTheme = (value) => (value === "light" ? "light" : "dark");
+export const parseTheme = (value) => (value === "dark" ? "dark" : "light");
 
 /** @param {Theme} theme @returns {Theme} */
 export const otherTheme = (theme) => (theme === "dark" ? "light" : "dark");

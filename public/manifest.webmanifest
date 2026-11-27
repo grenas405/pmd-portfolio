@@ -3,7 +3,7 @@
   "short_name": "Pedro Dominguez",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#10202e",
-  "theme_color": "#10202e",
+  "background_color": "#fbfaf8",
+  "theme_color": "#13294b",
   "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

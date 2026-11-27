@@ -14,5 +14,7 @@
 @import "./sections/faq.css";
 @import "./sections/contact.css";
 @import "./sections/case.css";
+@import "./street.css";
+@import "./components/callbar.css";
 @import "./mockups.css";
 @import "./motion.css";

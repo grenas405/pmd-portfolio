@@ -12,7 +12,7 @@ export const about = (content: SiteContent): Html => html`<section class="sectio
   <div class="about">
     <figure class="portrait">${portrait(content.profile)}<figcaption>${content.profile.name}, ${content.profile.city}</figcaption></figure>
     <div class="about__text">
-      ${sectionHeader("about", "about", "About Pedro")}
+      ${sectionHeader("about", "About Pedro")}
       <div class="prose">${content.about.map((paragraph) => html`<p>${paragraph}</p>`)}</div>
       <ul class="checks">${content.howIWork.map((item) => html`<li>${item}</li>`)}</ul>
     </div>

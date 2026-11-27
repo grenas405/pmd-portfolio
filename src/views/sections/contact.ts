@@ -1,13 +1,13 @@
 import type { SiteContent } from "../../content";
 import { html, type Html } from "../../html";
+import { skyline } from "../skyline";
 
-/** The closing band: the prairie returns behind the phone number. */
+/** The closing band: the OKC skyline at golden hour behind the phone number. */
 export const contact = (content: SiteContent): Html => {
   const { profile } = content;
   return html`<section class="contact" id="contact" aria-labelledby="contact-title">
-  <canvas class="prairie prairie--band" data-prairie="band" aria-hidden="true"></canvas>
+  ${skyline("contact__skyline", "contain")}
   <div class="contact__inner">
-    <p class="path" aria-hidden="true">${content.terminal.user}@${content.terminal.host}:~$ call pedro</p>
     <h2 id="contact-title" class="contact__title">Tell me what's slowing your business down.</h2>
     <p class="contact__lede">Call or text, or send an email. ${profile.responseTime}</p>
     <a class="contact__phone" href="tel:${profile.phone}">${profile.phoneDisplay}</a>

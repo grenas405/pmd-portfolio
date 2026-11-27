@@ -15,14 +15,7 @@
 }
 
 .case__back {
-  font-family: var(--mono);
   font-size: var(--step--2);
-}
-
-.case__back::before {
-  content: "cd ../";
-  margin-inline-end: 0.5ch;
-  color: var(--muted);
 }
 
 .case__meta {
@@ -127,7 +120,6 @@
 }
 
 .facts dt {
-  font-family: var(--mono);
   font-size: var(--step--2);
   color: var(--muted);
 }
@@ -150,7 +142,6 @@
 }
 
 .case__next-label {
-  font-family: var(--mono);
   font-size: var(--step--2);
   color: var(--accent);
 }
@@ -168,39 +159,94 @@
   color: var(--accent);
 }
 
-/* Error pages: a short terminal error over the prairie band. */
+/* Error pages: a shop door with a "Sorry, we're closed" sign. */
 .error-page {
-  position: relative;
-  isolation: isolate;
   display: grid;
+  gap: 2.5rem 4rem;
   align-items: center;
-  min-block-size: 82svh;
+  min-block-size: 80svh;
   padding: calc(var(--header-height) + 3rem) var(--pad-inline) 4rem;
-  overflow: clip;
-  background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 30%, var(--sky-horizon) 41.5%, var(--ground) 42.5%, var(--bg) 100%);
 }
 
-.error-page .prairie {
-  z-index: -1;
+@media (min-width: 48rem) {
+  .error-page {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  }
 }
 
-.error-page__inner {
-  max-inline-size: 44rem;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  background: var(--term-bg);
-  border: 1px solid var(--term-edge);
-  border-radius: var(--radius-lg);
+.closed-door {
+  inline-size: min(100%, 18rem);
+  margin-inline: auto;
+}
+
+.closed-door__frame {
+  fill: var(--shop-boutique);
+}
+
+.closed-door__glass {
+  fill: var(--window);
+}
+
+.closed-door__string {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 2;
+}
+
+.closed-door__nail,
+.closed-door__knob {
+  fill: var(--gold);
+}
+
+.closed-door__sign rect {
+  fill: var(--paper-raised);
+  stroke: var(--red-dirt);
+  stroke-width: 3;
+}
+
+.closed-door__sign text {
+  font-family: var(--font);
+  fill: var(--red-dirt);
+  font-weight: 800;
+}
+
+.closed-door__sorry {
+  font-size: 18px;
+}
+
+.closed-door__closed {
+  font-size: 16px;
+}
+
+.closed-door__sign {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .closed-door__sign {
+    animation: sign-swing 2.4s ease-in-out 2 alternate;
+  }
+
+  @keyframes sign-swing {
+    from {
+      rotate: -4deg;
+    }
+
+    to {
+      rotate: 4deg;
+    }
+  }
 }
 
 .error-page__code {
-  margin-block-start: 0.25rem;
-  font-family: var(--mono);
   font-size: var(--step--1);
-  color: var(--term-error);
+  font-weight: 700;
+  color: var(--accent);
 }
 
 .error-page__title {
-  margin-block-start: 1.25rem;
+  margin-block-start: 0.75rem;
   font-size: var(--step-3);
   font-stretch: var(--wide);
 }

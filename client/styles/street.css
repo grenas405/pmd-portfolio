@@ -1,0 +1,365 @@
+/* Main Street: three depth layers (skyline, shops, phone) plus notification cards. */
+.street {
+  position: relative;
+}
+
+.street__scene {
+  position: relative;
+  aspect-ratio: 720 / 560;
+  overflow: hidden;
+  border-radius: calc(var(--radius-lg) * 1.4);
+  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom) 70%);
+  box-shadow: var(--shadow), inset 0 0 0 1px var(--rule);
+  perspective: 1400px;
+}
+
+.street__layer {
+  position: absolute;
+  inset-inline: 0;
+}
+
+.street__layer--sky {
+  inset-block: 4% 30%;
+}
+
+.street__layer--block {
+  inset-block-end: 0;
+  block-size: 66%;
+}
+
+.street__layer--phone {
+  inset: auto 2% 3% auto;
+  inline-size: 23%;
+}
+
+.street__skyline,
+.street__block {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+/* Sky */
+.sky__sun {
+  fill: var(--sun);
+  filter: drop-shadow(0 0 24px color-mix(in oklab, var(--sun) 70%, transparent));
+}
+
+.sky__cloud {
+  fill: var(--cloud);
+}
+
+.sky__far {
+  fill: var(--skyline);
+}
+
+.sky__arch,
+.sky__cables,
+.sky__deck {
+  fill: none;
+  stroke: var(--skyline-bridge);
+  stroke-linecap: round;
+}
+
+.sky__arch {
+  stroke-width: 6;
+}
+
+.sky__cables {
+  stroke-width: 2;
+}
+
+.sky__deck {
+  stroke-width: 5;
+}
+
+/* Street */
+.street__sidewalk {
+  fill: var(--sidewalk);
+}
+
+.street__road {
+  fill: var(--road);
+}
+
+.street__lane {
+  stroke: var(--lane);
+  stroke-width: 3;
+  stroke-dasharray: 26 18;
+}
+
+.lamp__post {
+  stroke: var(--road);
+  stroke-width: 4;
+}
+
+.lamp__light {
+  fill: var(--window-lit);
+}
+
+/* Shops */
+.shop__wall {
+  fill: var(--shop-wall);
+}
+
+.shop--cafe {
+  --shop-wall: var(--shop-cafe);
+}
+
+.shop--salon {
+  --shop-wall: var(--shop-salon);
+}
+
+.shop--boutique {
+  --shop-wall: var(--shop-boutique);
+}
+
+.shop__cornice {
+  fill: color-mix(in oklab, var(--shop-wall) 70%, black);
+}
+
+.shop__signboard {
+  fill: var(--shop-trim);
+}
+
+.shop__name {
+  fill: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 800;
+  font-stretch: var(--semi-wide);
+}
+
+.shop__awning-base,
+.shop__scallop {
+  fill: color-mix(in oklab, var(--shop-wall) 80%, white);
+}
+
+.shop__awning-stripes {
+  stroke: var(--awning-stripe);
+  stroke-width: 9;
+  opacity: 0.85;
+}
+
+.shop__window,
+.shop__door {
+  fill: var(--window);
+  stroke: var(--shop-trim);
+  stroke-width: 5;
+}
+
+.shop__light {
+  fill: var(--window-lit);
+}
+
+.shop__art {
+  fill: none;
+  stroke: color-mix(in oklab, var(--shop-wall) 60%, black);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.shop__knob {
+  fill: var(--gold);
+}
+
+.shop__sign rect {
+  fill: var(--paper-raised);
+}
+
+.shop__sign text {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.shop__sign--open text {
+  fill: var(--sign-open);
+}
+
+.shop__sign--closed text {
+  fill: var(--sign-closed);
+}
+
+.shop__planter {
+  fill: color-mix(in oklab, var(--shop-trim) 70%, var(--road));
+}
+
+.shop__plant {
+  fill: var(--sage);
+}
+
+/* SVG parts that animate scale/rotate around their own box. */
+.shop__awning,
+.shop__sign,
+.shop,
+.street__car,
+.street__bird {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.shop__awning {
+  transform-origin: top center;
+}
+
+.shop {
+  transform-origin: bottom center;
+}
+
+/* Default (no JS, or reduced motion): open for business. */
+.shop__sign--closed {
+  opacity: 0;
+}
+
+.car__body {
+  fill: var(--car);
+}
+
+.car__glass {
+  fill: color-mix(in oklab, var(--sky) 80%, white);
+}
+
+.car__wheel {
+  fill: var(--ink);
+}
+
+.street__bird {
+  fill: var(--ink);
+  opacity: 0.8;
+}
+
+/* Notification cards, positioned above each shop. */
+.street__notes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.note {
+  position: absolute;
+  inset-block-start: 30%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-inline-size: 34%;
+  padding: 0.45rem 0.7rem;
+  font-size: clamp(0.62rem, 0.5rem + 0.45vw, 0.82rem);
+  font-weight: 650;
+  line-height: 1.25;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border-radius: 0.7rem;
+  box-shadow: 0 10px 26px -10px rgb(19 41 75 / 0.45);
+  opacity: 0;
+}
+
+.note--0 {
+  inset-inline-start: 3%;
+}
+
+.note--1 {
+  inset-inline-start: 34%;
+}
+
+.note--2 {
+  inset-inline-start: 64%;
+}
+
+.note.is-static {
+  opacity: 1;
+}
+
+.note__dot {
+  flex: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+/* The owner's phone, in the foreground. */
+.phone {
+  padding: 0.7rem 0.8rem 0.6rem;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 0.35rem solid var(--ink);
+  border-radius: 1.1rem;
+  box-shadow: 0 24px 40px -18px rgb(19 41 75 / 0.6);
+}
+
+.phone__title {
+  font-size: clamp(0.7rem, 0.55rem + 0.5vw, 0.95rem);
+  font-weight: 800;
+}
+
+.phone__counts {
+  display: grid;
+  gap: 0.25rem;
+  margin-block: 0.4rem;
+}
+
+.phone__count {
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(0.58rem, 0.48rem + 0.35vw, 0.78rem);
+  color: var(--ink-soft);
+}
+
+.phone__count b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.phone__foot {
+  font-size: clamp(0.5rem, 0.42rem + 0.3vw, 0.66rem);
+  color: var(--sage);
+}
+
+/* Pause control (WCAG 2.2.2), under the scene's corner. */
+.street__pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block-start: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  font: inherit;
+  font-size: var(--step--2);
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.street__pause-icon {
+  inline-size: 0.5rem;
+  block-size: 0.6rem;
+  border-inline: 0.16rem solid currentColor;
+}
+
+.street__pause[aria-pressed="true"] .street__pause-icon {
+  inline-size: 0;
+  block-size: 0;
+  border-inline: 0;
+  border-block: 0.32rem solid transparent;
+  border-inline-start: 0.5rem solid currentColor;
+}
+
+/* Before the script runs the intro, keep the scene still and invisible
+   (with a timed fallback so it always appears). */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .street:not(.is-live) .street__scene {
+    opacity: 0;
+    animation: street-fallback 0s 3s forwards;
+  }
+}
+
+@keyframes street-fallback {
+  to {
+    opacity: 1;
+  }
+}

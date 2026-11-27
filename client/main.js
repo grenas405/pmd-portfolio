@@ -7,9 +7,8 @@ import { drawIcons, drawOnScroll, lightSteps } from "./motion/draw.js";
 import { wireMagnetic } from "./motion/magnetic.js";
 import { revealTitles } from "./motion/reveal.js";
 import { wireMockups } from "./motion/tilt.js";
-import { startPrairie, VARIANTS } from "./prairie/scene.js";
-import { bootTerminal, showTerminal } from "./terminal/boot.js";
-import { wireClock, wirePrompt } from "./terminal/prompt.js";
+import { showStillStreet, startStreet } from "./street/scene.js";
+import { wireCallbar } from "./ui/callbar.js";
 import { wireCopyButtons } from "./ui/copy.js";
 import { wireMenu } from "./ui/menu.js";
 import { wireMotionControl } from "./ui/pause.js";
@@ -55,44 +54,30 @@ const main = (/** @type {Window} */ win) => {
   safely("copy", () => wireCopyButtons(win, all(doc, "[data-copy]"), toast));
   safely("scrollspy", () => wireScrollspy(doc, all(doc, "[data-spy]")));
 
-  // Hero terminal: boot sequence, prompt, clock.
-  const term = doc.querySelector("[data-term]");
-  if (term instanceof HTMLElement) {
-    safely("boot", () => {
+  // Hero: Main Street opens for business, with its own pause control.
+  /** @type {Array<{ setUserPaused: (paused: boolean) => void }>} */
+  const scenes = [];
+  const street = doc.querySelector("[data-street]");
+  if (street instanceof HTMLElement) {
+    safely("street", () => {
       try {
-        if (reduced) showTerminal(term);
-        else bootTerminal(term);
+        if (reduced) showStillStreet(street);
+        else scenes.push(startStreet(win, street));
       } catch (error) {
-        showTerminal(term);
+        showStillStreet(street);
         throw error;
       }
     });
-    safely("prompt", () => {
-      const form = doc.querySelector("[data-term-form]");
-      const log = doc.querySelector("[data-term-log]");
-      if (form instanceof HTMLFormElement && log instanceof HTMLElement)
-        wirePrompt(win, form, log, () => themeButton instanceof HTMLElement && themeButton.click());
-    });
-    safely("clock", () => {
-      const clock = doc.querySelector("[data-clock]");
-      if (clock instanceof HTMLElement) wireClock(win, clock);
-    });
-  }
-
-  // Prairie canvases (hero and closing band), all sharing one pause control.
-  /** @type {Array<{ setUserPaused: (paused: boolean) => void }>} */
-  const scenes = [];
-  for (const canvas of all(doc, "canvas[data-prairie]")) {
-    const options = VARIANTS[/** @type {HTMLCanvasElement} */ (canvas).dataset.prairie ?? ""];
-    if (!options) continue;
-    const cover = canvas.parentElement?.querySelector("[data-term]");
-    startPrairie(win, /** @type {HTMLCanvasElement} */ (canvas), options, cover instanceof HTMLElement ? cover : null)
-      .then((scene) => scenes.push(scene))
-      .catch((error) => console.error("[prairie] failed to start:", error));
   }
   safely("pause", () => {
     const button = doc.querySelector("[data-motion-toggle]");
-    if (button instanceof HTMLButtonElement && !reduced) wireMotionControl(button, () => scenes);
+    if (button instanceof HTMLButtonElement && !reduced && scenes.length > 0) wireMotionControl(button, () => scenes);
+  });
+
+  safely("callbar", () => {
+    const bar = doc.querySelector("[data-callbar]");
+    const anchors = all(doc, "[data-hero-actions], #contact, .error-page__actions");
+    if (bar instanceof HTMLElement) wireCallbar(bar, anchors);
   });
 
   // Scroll and pointer choreography. With reduced motion everything stays in its final, static state.
